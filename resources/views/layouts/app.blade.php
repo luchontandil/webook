@@ -24,19 +24,23 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container col-md-12">
               <div class="col-md-2">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/home') }}">
                     webook
                 </a>
               </div>
-              <div class="col-md-6">
-                <searchbar-component></searchbar-component>
-
-              </div>
+                @guest
+                @else
+                  <div class="col-md-8 justify-content-center">
+                      <searchbar-component
+                        route={{ route('search') }}
+                      ></searchbar-component>
+                  </div>
+                @endguest
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse col-md-2" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
 
