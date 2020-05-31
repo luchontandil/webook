@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -26,7 +27,8 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function search(){
-      return view('search');
+    public function search($username){
+      return User::where('name',$username)->get();
+      // return view('search');
     }
 }

@@ -184,19 +184,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    users: Object,
+    searchText: String
+  },
   name: 'Counter',
   data: function data() {
-    return {
-      users: [{
-        name: "luchito"
-      }, {
-        name: "tobito"
-      }]
-    };
+    return {};
   },
   methods: {
-    increment: function increment() {
-      this.count += 1;
+    search: function search() {
+      this.users = 1; //lamado a la api
     }
   }
 });
@@ -259,15 +257,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['route'],
+  props: {
+    route: String,
+    text: String
+  },
   data: function data() {
-    return {
-      message: ''
-    };
+    return {};
+  },
+  computed: {
+    href: function href() {
+      return "search/".concat(this.text);
+    }
   },
   methods: {
     debug: function debug() {
-      console.log(this.route);
+      console.log(this.text);
     }
   }
 });
@@ -62389,7 +62393,15 @@ var render = function() {
       staticStyle: { "text-aling": "center, width:50%" }
     },
     [
-      _c("b-form-input"),
+      _c("b-form-input", {
+        model: {
+          value: _vm.text,
+          callback: function($$v) {
+            _vm.text = $$v
+          },
+          expression: "text"
+        }
+      }),
       _vm._v(" "),
       _c(
         "b-input-group-append",
@@ -62397,7 +62409,7 @@ var render = function() {
           _c(
             "b-button",
             {
-              attrs: { variant: "info", href: this.route },
+              attrs: { variant: "info", href: _vm.href },
               on: {
                 click: function($event) {
                   return _vm.debug()

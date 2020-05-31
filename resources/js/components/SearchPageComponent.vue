@@ -18,18 +18,20 @@
 
 <script>
 export default {
+	props:{
+		users: Object,
+		searchText: String
+	},
 	name: 'Counter',
 	data() {
 		return {
-			users: [
-				{name:"luchito"},
-				{name:"tobito"}
-			],
+			
 		}
 	},
 	methods: {
-		increment() {
-			this.count += 1;
+		search() {
+			this.users = 1;
+			//lamado a la api
 		}
 	}
 }

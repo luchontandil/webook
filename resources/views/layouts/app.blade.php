@@ -32,7 +32,6 @@
                 @else
                   <div class="col-md-8 justify-content-center">
                       <searchbar-component
-                        route={{ route('search') }}
                       ></searchbar-component>
                   </div>
                 @endguest
