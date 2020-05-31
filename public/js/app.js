@@ -185,7 +185,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    users: Object,
+    users: Array,
     searchText: String
   },
   name: 'Counter',
@@ -266,7 +266,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     href: function href() {
-      return "search/".concat(this.text);
+      return "".concat(window.location.origin, "/search/").concat(this.text);
     }
   },
   methods: {

@@ -28,7 +28,6 @@ class HomeController extends Controller
     }
 
     public function search($username){
-      return User::where('name',$username)->get();
-      // return view('search');
+      return view('search', ["result" => User::where('name', $username)->get()]);
     }
 }

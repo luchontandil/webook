@@ -19,13 +19,13 @@
 <script>
 export default {
 	props:{
-		users: Object,
+		users: Array,
 		searchText: String
 	},
 	name: 'Counter',
 	data() {
 		return {
-			
+
 		}
 	},
 	methods: {
