@@ -29,7 +29,6 @@
                     </b-card-img>
 
                     <div style="margin-top: 5px">
-                      <sidebar-component></sidebar-component>
                     </div>
 
                   </b-card-body>
