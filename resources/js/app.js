@@ -2,6 +2,9 @@ window.Vue = require('vue');
 import Vue from 'vue';
 import Bootstrap from 'bootstrap';
 import BootstrapVue from 'bootstrap-vue';
+window.axios = require('axios');
+
+Vue.prototype.$http = window.axios;
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"

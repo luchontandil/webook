@@ -19,3 +19,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/search/{username}', 'HomeController@search')->name('search');
+// Route::get('/{image_name}', 'UserController@getPFP')->name('image');
+
+Route::post('/updatePFP','UserController@changePFP');

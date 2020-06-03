@@ -1,17 +1,24 @@
 <template>
 	<b-card
-		:title="username"
+		:user="user"
+		:key="forceRender"
+		:title="user.name"
 		style="margin-bottom:15px"
-		img-src="https://placekitten.com/g/300/450"
+		:img-src="user.pfp"
 		img-alt="Image"
-		img-top>
+		img-top
+	>
     <b-card-text>
-      This is a wider card with supporting text below as a natural lead-in to additional content.
-      This content is a little bit longer.
+      This is where your bio goes.
+			Tell others about you :)
     </b-card-text>
     <template v-slot:footer>
-			<sidebar-component></sidebar-component>
-      <small class="text-muted">Last updated 3 mins ago</small>
+			<sidebar-component
+				:userdata=user
+				@update="updateparent"
+			>
+			</sidebar-component>
+      <small class="text-muted"> Welcome to WeBook</small>
     </template>
   </b-card>
 </template>
@@ -19,23 +26,33 @@
 <script>
 export default {
 	props:{
-		user: String,
+		user: Object
 	},
 	name: 'user',
 	data() {
 		return {
-
+			forceRender: 0,
 		}
 	},
 	computed: {
 		username(){
-			return JSON.parse(this.user).name
+			return this.name
+		},
+		pfp(){
+			return '../'+this.user.pfp;
 		}
 	},
 	methods: {
-		placeholder() {
-
-		}
+		updateparent(data) {
+			console.log(data);
+			if(data.pfp){
+				this.user.pfp = data.pfp;
+				this.forceRerender();
+			}
+		},
+		forceRerender() {
+      this.forceRender++;
+    }
 	}
 }
 </script>
