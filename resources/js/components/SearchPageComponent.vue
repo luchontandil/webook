@@ -23,7 +23,7 @@
 <script>
 export default {
 	props:{
-		users: String,
+		users: {},
 		searchText: String
 	},
 	name: 'Counter',

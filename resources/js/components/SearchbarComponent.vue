@@ -14,10 +14,10 @@
  export default {
      props:{
 			 route:String,
-			 text:String
 		 } ,
      data() {
      	return {
+ 			 text: ''
     	}
     },
 		computed: {

@@ -2070,7 +2070,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    users: String,
+    users: {},
     searchText: String
   },
   name: 'Counter',
@@ -2109,12 +2109,23 @@ __webpack_require__.r(__webpack_exports__);
     user: Object
   },
   data: function data() {
-    return {};
+    return {
+      forceRender: 0,
+      pfpPath: null
+    };
   },
   methods: {
-    debug: function debug() {
-      console.log(this.name);
+    load: function load() {
+      this.pfp();
+      this.forceRender++;
+    },
+    pfp: function pfp() {
+      this.pfpPath = "".concat(window.location.origin, "/").concat(this.user.pfp);
     }
+  },
+  computed: {},
+  mounted: function mounted() {
+    this.load();
   }
 });
 
@@ -2143,11 +2154,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    route: String,
-    text: String
+    route: String
   },
   data: function data() {
-    return {};
+    return {
+      text: ''
+    };
   },
   computed: {
     href: function href() {
@@ -64302,8 +64314,9 @@ var render = function() {
     { staticClass: "d-flex align-items-center" },
     [
       _c("b-avatar", {
+        key: _vm.forceRender,
         staticClass: "mr-3",
-        attrs: { variant: "info", src: "https://placekitten.com/300/300" }
+        attrs: { variant: "info", src: _vm.pfpPath }
       }),
       _vm._v(" "),
       _c("span", { staticClass: "mr-auto" }, [_vm._v(_vm._s(_vm.user.name))]),

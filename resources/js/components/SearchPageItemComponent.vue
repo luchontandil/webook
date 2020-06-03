@@ -1,6 +1,6 @@
 <template>
 	<b-list-group-item class="d-flex align-items-center">
-		<b-avatar variant="info" src="https://placekitten.com/300/300" class="mr-3"></b-avatar>
+		<b-avatar :key="forceRender" variant="info" :src="pfpPath" class="mr-3"></b-avatar>
 		<span class="mr-auto">{{ user.name }}</span>
 		<b-badge>13</b-badge>
 	</b-list-group-item>
@@ -10,17 +10,29 @@
 export default {
 	name: 'search-item-component',
 	props:{
-		user: Object
+		user: Object,
+
 	},
 	data() {
 		return {
-
+			forceRender : 0,
+			pfpPath: null
 		}
 	},
 	methods: {
-		debug() {
-			console.log(this.name);
+		load() {
+			this.pfp();
+			this.forceRender++;
+		},
+		pfp(){
+			this.pfpPath = `${window.location.origin}/${this.user.pfp}`;
 		}
+	},
+	computed: {
+
+	},
+	mounted(){
+		this.load();
 	}
 }
 </script>
