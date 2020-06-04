@@ -2103,15 +2103,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'search-item-component',
   props: {
-    user: Object
+    user: Object,
+    variants: ['transparent', 'white', 'light', 'dark', 'primary', 'secondary', 'success', 'danger', 'warning', 'info']
   },
   data: function data() {
     return {
       forceRender: 0,
-      pfpPath: null
+      pfpPath: null,
+      variant: 'info',
+      isFollow: '0'
     };
   },
   methods: {
@@ -2121,10 +2126,34 @@ __webpack_require__.r(__webpack_exports__);
     },
     pfp: function pfp() {
       this.pfpPath = this.user.pfp != "/images/default.png" ? "".concat(window.location.origin, "/").concat(this.user.pfp) : "".concat(window.location.origin, "/images/default.png");
+    },
+    follow: function follow() {
+      var _this = this;
+
+      var data = new FormData();
+      data.append('userid', this.user._id);
+      this.$http.post("/follow", data).then(function (response) {
+        console.log(response.data);
+        _this.isFollow = response.data;
+      });
     }
   },
-  computed: {},
+  computed: {
+    status: function status() {
+      // this.variant = "";
+      return this.isFollow ? "follow" : "unfollow";
+    }
+  },
   mounted: function mounted() {
+    var _this2 = this;
+
+    var getUrl = window.location;
+    var baseUrl = getUrl.protocol + "//" + getUrl.host + "/";
+    axios.get(baseUrl + '/getID').then(function (response) {
+      if (_this2.user.followers.includes(String(response.data))) {
+        _this2.isFollow = 0;
+      }
+    });
     this.load();
   }
 });
@@ -64321,7 +64350,18 @@ var render = function() {
       _vm._v(" "),
       _c("span", { staticClass: "mr-auto" }, [_vm._v(_vm._s(_vm.user.name))]),
       _vm._v(" "),
-      _c("b-badge", [_vm._v("13")])
+      _c(
+        "b-button",
+        {
+          attrs: { variant: _vm.variant },
+          on: {
+            click: function($event) {
+              return _vm.follow()
+            }
+          }
+        },
+        [_vm._v("\n\t\t" + _vm._s(_vm.status) + "\n \t")]
+      )
     ],
     1
   )

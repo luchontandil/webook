@@ -22,7 +22,9 @@ class User extends \Jenssegers\Mongodb\Eloquent\Model implements
      * @var array
      */
      protected $attributes = [
-        'pfp' => '/images/default.png'
+        'pfp' => '/images/default.png',
+        'followList' => array(),
+        'followers' => array()
     ];
     protected $fillable = [
         'id','name', 'email', 'password', 'pfp'

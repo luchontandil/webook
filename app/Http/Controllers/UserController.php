@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Auth;
 
 class UserController extends Controller
 {
+    public function getID(Request $request){
+        return User::find(Auth::user()->id)->id;
+    }
 
     public function changePFP(Request $request)
     {
-
     	$imageName = rand().''.time().''.rand().'.'.$request->ext;
       $request->photo->move(public_path('images/users'), $imageName);
 
@@ -22,14 +25,40 @@ class UserController extends Controller
 			return response()->json($user->pfp);
     }
 
-	// 	public function changePFP(Request $request){
-	//
-	//     // Read file contents...
-	//     $contents = file_get_contents($request->photo->path());
-	//
-	//     // ...or just move it somewhere else (eg: local `storage` directory or S3)
-	//     $newPath = $request->photo->store('photos', 's3');
-	// 		$user = User::where('_id', $request->_id)->get();
-	// 		return response()->json(['success'=>'You have successfully upload image.']);
-	// }
+	  public function follow(Request $request){
+      $user = User::find(Auth::user()->id);
+      $userToFollow = User::find($request->userid);
+
+      $exist = false;
+      $followList = $user->followList;
+      foreach ($followList as $id) {
+        if($userToFollow->id == $id){
+          $exist=true;
+        }
+      }
+      $followersTarget = $userToFollow->followers;
+      if(!$exist){//follow
+
+        array_push($followList, $userToFollow->id);
+        array_push($followersTarget, $user->_id);
+      }
+      else{       // unfollow
+        if (($key = array_search( $userToFollow->id, $followList)) !== false) {
+          unset($followList[$key]);
+        }
+        if (($key = array_search( $user->id, $followersTarget)) !== false) {
+          unset($followersTarget[$key]);
+        }
+      }
+      $userToFollow->followers = $followersTarget;
+      $user->followList = $followList;
+
+      $userToFollow->save();
+      $user->save();
+
+      $userToFollow->refresh();
+			$user->refresh();
+
+      return response()->json($exist);
+    }
 }
