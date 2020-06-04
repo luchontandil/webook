@@ -2120,7 +2120,7 @@ __webpack_require__.r(__webpack_exports__);
       this.forceRender++;
     },
     pfp: function pfp() {
-      this.pfpPath = "".concat(window.location.origin, "/").concat(this.user.pfp);
+      this.pfpPath = this.user.pfp != "/images/default.png" ? "".concat(window.location.origin, "/").concat(this.user.pfp) : "".concat(window.location.origin, "/images/default.png");
     }
   },
   computed: {},
@@ -2163,7 +2163,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     href: function href() {
-      return "".concat(window.location.origin, "/search/").concat(this.text);
+      return this.text ? "".concat(window.location.origin, "/search/").concat(this.text) : "".concat(window.location.origin, "/home");
     }
   },
   methods: {

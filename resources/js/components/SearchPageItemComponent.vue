@@ -25,7 +25,7 @@ export default {
 			this.forceRender++;
 		},
 		pfp(){
-			this.pfpPath = `${window.location.origin}/${this.user.pfp}`;
+			this.pfpPath = this.user.pfp != "/images/default.png" ? `${window.location.origin}/${this.user.pfp}` :`${window.location.origin}/images/default.png`;
 		}
 	},
 	computed: {

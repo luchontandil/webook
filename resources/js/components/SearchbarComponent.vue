@@ -22,7 +22,7 @@
     },
 		computed: {
 			href(){
-				return `${window.location.origin}/search/${this.text}`;
+				return this.text ? `${window.location.origin}/search/${this.text}` : `${window.location.origin}/home`;
 			}
 		},
 		methods: {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -28,6 +29,8 @@ class HomeController extends Controller
     }
 
     public function search($username){
-      return view('search', ["result" => User::where('name', "like", "%".$username."%")->get()]);
+      return view('search', ["result" => User::where('name', "like", "%".$username."%")
+      ->where('_id', "!=", Auth::user()->id)
+      ->get()]);
     }
 }
