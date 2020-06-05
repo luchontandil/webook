@@ -2135,12 +2135,17 @@ __webpack_require__.r(__webpack_exports__);
       this.$http.post("/follow", data).then(function (response) {
         console.log(response.data);
         _this.isFollow = response.data;
+
+        if (_this.isFollow) {
+          _this.variant = 'info';
+        } else {
+          _this.variant = 'danger';
+        }
       });
     }
   },
   computed: {
     status: function status() {
-      // this.variant = "";
       return this.isFollow ? "follow" : "unfollow";
     }
   },
@@ -2152,6 +2157,9 @@ __webpack_require__.r(__webpack_exports__);
     axios.get(baseUrl + '/getID').then(function (response) {
       if (_this2.user.followers.includes(String(response.data))) {
         _this2.isFollow = 0;
+        _this2.variant = 'danger';
+      } else {
+        _this2.variant = 'info';
       }
     });
     this.load();

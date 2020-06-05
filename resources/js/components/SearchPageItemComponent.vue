@@ -49,12 +49,17 @@ export default {
 			this.$http.post("/follow", data).then((response)=>{
 					console.log(response.data);
 					this.isFollow = response.data;
+					if(this.isFollow){
+					 	this.variant = 'info'
+					}
+					else{
+						this.variant = 'danger'
+	 			 	}
 			});
 		}
 	},
 	computed: {
 		status(){
-			// this.variant = "";
 			return this.isFollow ? "follow" : "unfollow";
 		}
 	},
@@ -64,6 +69,10 @@ export default {
 		axios.get(baseUrl+'/getID').then(response => {
 		   if(this.user.followers.includes(String(response.data))){
 				 this.isFollow = 0;
+				 this.variant = 'danger'
+			 }
+			 else{
+				  this.variant = 'info'
 			 }
 		})
 		this.load();
