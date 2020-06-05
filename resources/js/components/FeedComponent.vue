@@ -12,9 +12,12 @@
                     variant="info"
                     src="https://placekitten.com/300/300"
                     style="margin-right:10px"
+                    size="4rem"
                     ></b-avatar>
                     <div style="font-weight:bold">
-                        {{ username }}
+                        {{ username }} <br>
+                        <small class="text-muted"> 15 minutes ago</small>
+
                     </div>
                   </div>
 

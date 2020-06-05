@@ -1949,6 +1949,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Counter',
   data: function data() {
@@ -64164,16 +64167,20 @@ var render = function() {
                       staticStyle: { "margin-right": "10px" },
                       attrs: {
                         variant: "info",
-                        src: "https://placekitten.com/300/300"
+                        src: "https://placekitten.com/300/300",
+                        size: "4rem"
                       }
                     }),
                     _vm._v(" "),
                     _c("div", { staticStyle: { "font-weight": "bold" } }, [
                       _vm._v(
-                        "\n                    " +
-                          _vm._s(_vm.username) +
-                          "\n                "
-                      )
+                        "\n                    " + _vm._s(_vm.username) + " "
+                      ),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("small", { staticClass: "text-muted" }, [
+                        _vm._v(" 15 minutes ago")
+                      ])
                     ])
                   ],
                   1
@@ -64353,7 +64360,7 @@ var render = function() {
       _c("b-avatar", {
         key: _vm.forceRender,
         staticClass: "mr-3",
-        attrs: { variant: "info", src: _vm.pfpPath }
+        attrs: { variant: "info", src: _vm.pfpPath, size: "6rem" }
       }),
       _vm._v(" "),
       _c("span", { staticClass: "mr-auto" }, [_vm._v(_vm._s(_vm.user.name))]),

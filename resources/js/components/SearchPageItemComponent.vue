@@ -1,6 +1,6 @@
 <template>
 	<b-list-group-item class="d-flex align-items-center">
-		<b-avatar :key="forceRender" variant="info" :src="pfpPath" class="mr-3"></b-avatar>
+		<b-avatar :key="forceRender" variant="info" :src="pfpPath" class="mr-3" size="6rem"></b-avatar>
 		<span class="mr-auto">{{ user.name }}</span>
 		<b-button :variant="variant" @click="follow()">
 			{{ status }}
