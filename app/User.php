@@ -27,7 +27,7 @@ class User extends \Jenssegers\Mongodb\Eloquent\Model implements
         'followers' => array()
     ];
     protected $fillable = [
-        'id','name', 'email', 'password', 'pfp'
+        'id','name', 'email', 'password', 'pfp', 'bio'
     ];
 
     /**

@@ -24,7 +24,15 @@ class UserController extends Controller
 
 			return response()->json($user->pfp);
     }
+    public function changeBio(Request $request)
+    {
+			$user = User::find($request->userid);
+			$user->bio = $request->bio;
+			$user->save();
+			$user->refresh();
 
+			return response()->json($user->bio);
+    }
 	  public function follow(Request $request){
       $user = User::find(Auth::user()->id);
       $userToFollow = User::find($request->userid);

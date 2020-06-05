@@ -14,11 +14,13 @@
         <!-- <b-form-group label="Backdrop variant" label-for="backdrop-variant">
           <b-form-select id="backdrop-variant" v-model="variant" :options="variants"></b-form-select>
         </b-form-group> -->
+         <h5 class="mt-0">Profile Picture</h5>
         <b-button
           variant="info"
           @click=changepfp
-        >Change your profile pic</b-button>
-        <div style=" visibility: hidden">
+        >Upload
+        </b-button>
+        <div style=" visibility: hidden; height:0px;">
          <b-form-file
           id="fileUpload"
           v-model="pfpfile"
@@ -26,8 +28,26 @@
           @input="uploadpfp"
           accept="image/*"
           ></b-form-file>
+
+        </div>
+        <div class="mt-3">
+          <h5 class="mt-0">Edit your biography</h5>
+          <b-form-textarea
+           id="textarea"
+           v-model="userdata.bio"
+           placeholder="Enter something..."
+           rows="3"
+           no-resize
+           style="margin-bottom:10px;margin-right:10px;width:90%;"
+         ></b-form-textarea>
+         <b-button
+           variant="info"
+           @click=saveBio
+         >Save Biography
+         </b-button>
         </div>
       </div>
+
     </b-sidebar>
   </div>
 </template>
@@ -57,11 +77,23 @@
       }
     },
     methods: {
+      saveBio(){
+        let text = document.querySelector("#textarea").value;
+        this.userdata.bio = text;
+
+        const data = new FormData();
+        data.append('bio', text);
+        data.append('userid', this.userdata._id);
+
+        this.$http.post("/updateBio", data).then((response)=>{
+            this.userdata.bio = response.data;
+        });
+        console.log(text);
+      },
 			changepfp() {
   			document.getElementById("fileUpload").click();
 			},
       update(){
-        this.userdata.pfp = this.pfpPath;
         this.$emit('update', this.userdata);
       },
       uploadpfp(){
@@ -81,6 +113,7 @@
 
           this.$http.post("/updatePFP", data).then((response)=>{
               this.pfpPath = response.data;
+              this.userdata.pfp = response.data;
           }).then(()=>{
               console.log(this.pfpPath);
           });

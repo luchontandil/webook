@@ -2005,6 +2005,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     user: Object
@@ -2025,12 +2028,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     updateparent: function updateparent(data) {
-      console.log(data);
-
-      if (data.pfp) {
-        this.user.pfp = data.pfp;
-        this.forceRerender();
-      }
+      this.user = data;
+      this.forceRerender();
     },
     forceRerender: function forceRerender() {
       this.forceRender++;
@@ -2258,6 +2257,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     userdata: Object
@@ -2271,15 +2290,27 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    saveBio: function saveBio() {
+      var _this = this;
+
+      var text = document.querySelector("#textarea").value;
+      this.userdata.bio = text;
+      var data = new FormData();
+      data.append('bio', text);
+      data.append('userid', this.userdata._id);
+      this.$http.post("/updateBio", data).then(function (response) {
+        _this.userdata.bio = response.data;
+      });
+      console.log(text);
+    },
     changepfp: function changepfp() {
       document.getElementById("fileUpload").click();
     },
     update: function update() {
-      this.userdata.pfp = this.pfpPath;
       this.$emit('update', this.userdata);
     },
     uploadpfp: function uploadpfp() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.pfpfile) {
         var fullPath = document.getElementById("fileUpload").value;
@@ -2296,9 +2327,10 @@ __webpack_require__.r(__webpack_exports__);
         data.append('photo', this.pfpfile);
         data.append('userid', this.userdata._id);
         this.$http.post("/updatePFP", data).then(function (response) {
-          _this.pfpPath = response.data;
+          _this2.pfpPath = response.data;
+          _this2.userdata.pfp = response.data;
         }).then(function () {
-          console.log(_this.pfpPath);
+          console.log(_this2.pfpPath);
         });
       }
     }
@@ -64188,7 +64220,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("b-card-text", [
                   _vm._v(
-                    "\n                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n                "
+                    "\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas suscipit velit voluptatum autem eaque eum itaque voluptates excepturi corporis sunt ad minus nam vel modi, numquam nesciunt. Sunt, ipsa ipsam?\n                "
                   )
                 ]),
                 _vm._v(" "),
@@ -64264,11 +64296,15 @@ var render = function() {
       ])
     },
     [
-      _c("b-card-text", [
-        _vm._v(
-          "\n      This is where your bio goes.\n\t\t\tTell others about you :)\n    "
-        )
-      ])
+      !_vm.user.bio
+        ? _c("b-card-text", [
+            _vm._v(
+              "\n      This is where your bio goes.\n\t\t\tTell others about you :)\n    "
+            )
+          ])
+        : _c("b-card-text", [
+            _vm._v("\n      " + _vm._s(_vm.user.bio) + "\n    ")
+          ])
     ],
     1
   )
@@ -64498,15 +64534,17 @@ var render = function() {
             "div",
             { staticClass: "px-3 py-2" },
             [
+              _c("h5", { staticClass: "mt-0" }, [_vm._v("Profile Picture")]),
+              _vm._v(" "),
               _c(
                 "b-button",
                 { attrs: { variant: "info" }, on: { click: _vm.changepfp } },
-                [_vm._v("Change your profile pic")]
+                [_vm._v("Upload\n      ")]
               ),
               _vm._v(" "),
               _c(
                 "div",
-                { staticStyle: { visibility: "hidden" } },
+                { staticStyle: { visibility: "hidden", height: "0px" } },
                 [
                   _c("b-form-file", {
                     staticClass: "mt-3",
@@ -64520,6 +64558,44 @@ var render = function() {
                       expression: "pfpfile"
                     }
                   })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "mt-3" },
+                [
+                  _c("h5", { staticClass: "mt-0" }, [
+                    _vm._v("Edit your biography")
+                  ]),
+                  _vm._v(" "),
+                  _c("b-form-textarea", {
+                    staticStyle: {
+                      "margin-bottom": "10px",
+                      "margin-right": "10px",
+                      width: "90%"
+                    },
+                    attrs: {
+                      id: "textarea",
+                      placeholder: "Enter something...",
+                      rows: "3",
+                      "no-resize": ""
+                    },
+                    model: {
+                      value: _vm.userdata.bio,
+                      callback: function($$v) {
+                        _vm.$set(_vm.userdata, "bio", $$v)
+                      },
+                      expression: "userdata.bio"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    { attrs: { variant: "info" }, on: { click: _vm.saveBio } },
+                    [_vm._v("Save Biography\n       ")]
+                  )
                 ],
                 1
               )

@@ -3,14 +3,17 @@
 		:user="user"
 		:key="forceRender"
 		:title="user.name"
-		style="margin-bottom:15px"
+		 style="margin-bottom:15px"
 		:img-src="user.pfp"
 		img-alt="Image"
 		img-top
 	>
-    <b-card-text>
+    <b-card-text v-if="!user.bio">
       This is where your bio goes.
 			Tell others about you :)
+    </b-card-text>
+		<b-card-text v-else>
+      {{ user.bio }}
     </b-card-text>
     <template v-slot:footer>
 			<sidebar-component
@@ -44,11 +47,8 @@ export default {
 	},
 	methods: {
 		updateparent(data) {
-			console.log(data);
-			if(data.pfp){
-				this.user.pfp = data.pfp;
-				this.forceRerender();
-			}
+			this.user = data;
+			this.forceRerender();
 		},
 		forceRerender() {
       this.forceRender++;
