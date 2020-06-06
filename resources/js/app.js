@@ -18,7 +18,8 @@ Vue.component('search-page-component', require('./components/SearchPageComponent
 Vue.component('search-item-component', require('./components/SearchPageItemComponent.vue').default);
 
 Vue.component('main-avatar', require('./components/MainAvatarComponent.vue').default);
-
+Vue.component('followers', require('./components/FollowersComponent.vue').default);
+Vue.component('follower', require('./components/FollowersAvatarItemComponent.vue').default);
 
 const app = new Vue({
   el: '#app'

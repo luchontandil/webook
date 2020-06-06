@@ -33,6 +33,17 @@ class UserController extends Controller
 
 			return response()->json($user->bio);
     }
+    public function getFollowers()
+    {
+      $response = [];
+			$user = User::find(Auth::user()->id);
+      $followers = $user->followers;
+      foreach ($followers as $follower_id) {
+        $follower = User::find($follower_id);
+        array_push($response, $follower);
+      }
+			return response()->json($response);
+    }
 	  public function follow(Request $request){
       $user = User::find(Auth::user()->id);
       $userToFollow = User::find($request->userid);
