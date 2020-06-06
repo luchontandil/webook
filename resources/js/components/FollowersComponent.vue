@@ -11,7 +11,7 @@
 	</div>
 	 <div
 	 	class="col-4 col-sm-4"
-		v-for="follower in followers"
+		v-for="follower in lastSixFollowers"
 		style="font-size: 1.2rem; padding:10px 0px 0px 0px;"
 
 		>
@@ -43,6 +43,9 @@ export default {
 		},
 		pfp(){
 			return '../'+this.user.pfp;
+		},
+		lastSixFollowers(){
+			return this.followers.reverse().slice(0, 6).filter(item => item!= null);
 		}
 	},
 	methods: {

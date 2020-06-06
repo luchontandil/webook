@@ -2081,6 +2081,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     pfp: function pfp() {
       return '../' + this.user.pfp;
+    },
+    lastSixFollowers: function lastSixFollowers() {
+      return this.followers.reverse().slice(0, 6).filter(function (item) {
+        return item != null;
+      });
     }
   },
   methods: {
@@ -64471,7 +64476,7 @@ var render = function() {
         [
           _c("div", { staticClass: "col-4 col-sm-4" }),
           _vm._v(" "),
-          _vm._l(_vm.followers, function(follower) {
+          _vm._l(_vm.lastSixFollowers, function(follower) {
             return _c(
               "div",
               {
