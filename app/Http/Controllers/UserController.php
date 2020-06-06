@@ -17,6 +17,8 @@ class UserController extends Controller
     	$imageName = rand().''.time().''.rand().'.'.$request->ext;
       $request->photo->move(public_path('images/users'), $imageName);
 
+      $this->jpegImgCrop('../public/images/users/'.$imageName, $request->ext);
+
 			$user = User::find($request->userid);
 			$user->pfp = 'images/users/'.$imageName;
 			$user->save();
@@ -24,6 +26,62 @@ class UserController extends Controller
 
 			return response()->json($user->pfp);
     }
+    public function jpegImgCrop($target_url,$image_type) {//support
+      $image = imagecreatefromjpeg($target_url);
+      $filename = $target_url;
+      $width = imagesx($image);
+      $height = imagesy($image);
+      // $image_type = imagetypes($image); //IMG_GIF | IMG_JPG | IMG_PNG | IMG_WBMP | IMG_XPM
+
+      if($width==$height) {
+
+       $thumb_width = $width;
+       $thumb_height = $height;
+
+      } elseif($width<$height) {
+
+       $thumb_width = $width;
+       $thumb_height = $width;
+
+      } elseif($width>$height) {
+
+       $thumb_width = $height;
+       $thumb_height = $height;
+
+      } else {
+       $thumb_width = 150;
+       $thumb_height = 150;
+      }
+
+      $original_aspect = $width / $height;
+      $thumb_aspect = $thumb_width / $thumb_height;
+
+      if ( $original_aspect >= $thumb_aspect ) {
+
+         // If image is wider than thumbnail (in aspect ratio sense)
+         $new_height = $thumb_height;
+         $new_width = $width / ($height / $thumb_height);
+
+      }
+      else {
+         // If the thumbnail is wider than the image
+         $new_width = $thumb_width;
+         $new_height = $height / ($width / $thumb_width);
+      }
+
+      $thumb = imagecreatetruecolor( $thumb_width, $thumb_height );
+
+      // Resize and crop
+      imagecopyresampled($thumb,
+             $image,
+             0 - ($new_width - $thumb_width) / 2, // Center the image horizontally
+             0 - ($new_height - $thumb_height) / 2, // Center the image vertically
+             0, 0,
+             $new_width, $new_height,
+             $width, $height);
+      imagejpeg($thumb, $filename, 80);
+
+ }
     public function changeBio(Request $request)
     {
 			$user = User::find($request->userid);
