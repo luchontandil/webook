@@ -17,6 +17,8 @@ Vue.component('searchbar-component', require('./components/SearchbarComponent.vu
 Vue.component('search-page-component', require('./components/SearchPageComponent.vue').default);
 Vue.component('search-item-component', require('./components/SearchPageItemComponent.vue').default);
 
+Vue.component('post-form', require('./components/PostFormComponent.vue').default);
+
 Vue.component('main-avatar', require('./components/MainAvatarComponent.vue').default);
 Vue.component('followers', require('./components/FollowersComponent.vue').default);
 Vue.component('follower', require('./components/FollowersAvatarItemComponent.vue').default);

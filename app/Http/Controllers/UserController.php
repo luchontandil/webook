@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Post;
 use Auth;
 
 class UserController extends Controller
@@ -11,7 +12,23 @@ class UserController extends Controller
     public function getID(Request $request){
         return User::find(Auth::user()->id)->id;
     }
+    public function post(Request $request)
+    {
+      $post = new Post([
+        'content' => $request->content,
+        'likedBy' => $request->likes
+      ]);
 
+      $post->save();
+      $post->refresh();
+
+      $user = User::find(Auth::user()->id);
+      $user->posts()->save($post);
+      // $user->save();
+      $user->refresh();
+
+      return response()->json($user->posts);
+    }
     public function changePFP(Request $request)
     {
     	$imageName = rand().''.time().''.rand().'.'.$request->ext;

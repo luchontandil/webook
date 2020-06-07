@@ -9,7 +9,9 @@
 			></main-avatar>
 		</div>
 		<div class="col-md-6 justify-content-center">
-			<feed-component></feed-component>
+			<feed-component
+			:user='@json(auth()->user())'
+			></feed-component>
 		</div>
 		<div class="col-md-3">
 			<followers

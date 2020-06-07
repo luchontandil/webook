@@ -39,4 +39,7 @@ class User extends \Jenssegers\Mongodb\Eloquent\Model implements
         'password', 'remember_token',
     ];
 
+    public function posts() {
+     return $this->hasMany('App\Post');
+    }
 }

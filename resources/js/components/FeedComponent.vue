@@ -3,6 +3,9 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
               <div>
+
+                <post-form :user="user"></post-form>
+
                   <b-card-body
                     body-bg-variant="light"
                   >
@@ -44,6 +47,9 @@
 
 <script>
   export default {
+    props:{
+  		user: {},
+  	},
     name: 'Counter',
     data() {
       return {

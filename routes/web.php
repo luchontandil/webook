@@ -26,3 +26,4 @@ Route::get('/getFollowing', 'UserController@getFollowing')->name('getFollowing')
 Route::post('/updateBio','UserController@changeBio');
 Route::post('/updatePFP','UserController@changePFP');
 Route::post('/follow','UserController@follow');
+Route::post('/post','UserController@post');
