@@ -15,6 +15,10 @@
 			<followers
 			:user='@json(auth()->user())'
 			></followers>
+			<br>
+			<following
+			:user='@json(auth()->user())'
+			></following>
 		</div>
 
 	</div>

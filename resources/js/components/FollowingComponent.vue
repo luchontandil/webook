@@ -13,9 +13,8 @@
 	 	class="col-4 col-sm-4"
 		v-for="follower in lastSixFollowers"
 		style="font-size: 1.2rem; padding:10px 0px 0px 0px;"
-
 		>
-		 <follower :user="follower"></follower>
+		 <followingItem :user="follower"></followingItem>
 	 </div>
 	 </b-card-body>
  </div>
@@ -48,7 +47,7 @@ export default {
 			return this.followers.reverse().slice(0, 6).filter(item => item!= null);
 		},
 		followersTitle(){
-			return `Followers (${this.followers.length})`;
+			return `Following (${this.followers.length})`;
 		}
 	},
 	methods: {
@@ -63,7 +62,7 @@ export default {
 		// var getUrl = window.location;
 		// var baseUrl = getUrl .protocol + "/" + getUrl.host + "/";
 
-		axios.get('/getFollowers').then(response => {
+		axios.get('/getFollowing').then(response => {
 			 console.log(response.data);
 
 			 this.followers = response.data;

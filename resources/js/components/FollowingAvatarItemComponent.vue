@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<b-avatar
-		:id="this.user._id"
+		:id="this.user.name"
 		:src="this.user.pfp"
 		:href="url"
 		size="4rem"
 		rounded>
 		</b-avatar>
 		<template>
-			<b-popover :target="this.user._id" triggers="hover" placement="left">
+			<b-popover :target="this.user.name" triggers="hover" placement="left">
 				<template v-slot:title>{{ user.name }}</template>
 			 {{ user.bio }}
 			</b-popover>

@@ -34,20 +34,14 @@ class UserController extends Controller
       // $image_type = imagetypes($image); //IMG_GIF | IMG_JPG | IMG_PNG | IMG_WBMP | IMG_XPM
 
       if($width==$height) {
-
        $thumb_width = $width;
        $thumb_height = $height;
-
       } elseif($width<$height) {
-
        $thumb_width = $width;
        $thumb_height = $width;
-
       } elseif($width>$height) {
-
        $thumb_width = $height;
        $thumb_height = $height;
-
       } else {
        $thumb_width = 150;
        $thumb_height = 150;
@@ -91,6 +85,7 @@ class UserController extends Controller
 
 			return response()->json($user->bio);
     }
+
     public function getFollowers()
     {
       $response = [];
@@ -102,7 +97,20 @@ class UserController extends Controller
       }
 			return response()->json($response);
     }
-	  public function follow(Request $request){
+
+    public function getFollowing()
+    {
+      $response = [];
+			$user = User::find(Auth::user()->id);
+      $following = $user->followList;
+      foreach ($following as $follower_id) {
+        $follower = User::find($follower_id);
+        array_push($response, $follower);
+      }
+			return response()->json($response);
+    }
+
+    public function follow(Request $request){
       $user = User::find(Auth::user()->id);
       $userToFollow = User::find($request->userid);
 
