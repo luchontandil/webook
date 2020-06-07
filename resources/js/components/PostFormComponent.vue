@@ -47,14 +47,14 @@ export default {
 			this.show = true;
 			evt.preventDefault()
 			// alert(JSON.stringify(this.post))
-				const data = new FormData();
-				data.append('content', this.post.content);
-				data.append('likes',this.post.likedBy);
+			const data = new FormData();
+			data.append('content', this.post.content);
+			data.append('likes',this.post.likedBy);
 
-				this.$http.post("/post", data).then((response)=>{
-					this.post.content = '';
-					setTimeout(()=>{this.show = false},100);
-				});
+			this.$http.post("/post", data).then((response)=>{
+				this.post.content = '';
+				setTimeout(()=>{this.show = false},100);
+			});
 		},
 		onReset(evt) {
 			evt.preventDefault()

@@ -19,7 +19,7 @@ class Post extends \Jenssegers\Mongodb\Eloquent\Model{ use Notifiable;
     ];
 
     protected $hidden = [
-
+      'user_id'
     ];
 
     public function user(){

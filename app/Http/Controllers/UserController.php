@@ -16,7 +16,7 @@ class UserController extends Controller
     {
       $post = new Post([
         'content' => $request->content,
-        'likedBy' => $request->likes
+        'likedBy' => $request->likedBy
       ]);
 
       $post->save();
@@ -27,7 +27,17 @@ class UserController extends Controller
       // $user->save();
       $user->refresh();
 
-      return response()->json($user->posts);
+      return response()->json($post);
+    }
+    public function getPosts()
+    {
+      $user = User::find(Auth::user()->id);
+      // $posts = Post::with('user')->where('user_id',$user->_id)->get();
+      $posts = Post::with('user')
+      ->where('user_id',$user->_id)
+      ->orWhereIn('user_id', $user->followList)
+      ->get();
+      return response()->json($posts);
     }
     public function changePFP(Request $request)
     {

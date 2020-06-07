@@ -22,6 +22,7 @@ Route::get('/search/{username}', 'HomeController@search')->name('search');
 Route::get('/getID', 'UserController@getID')->name('getID');
 Route::get('/getFollowers', 'UserController@getFollowers')->name('getFollowers');
 Route::get('/getFollowing', 'UserController@getFollowing')->name('getFollowing');
+Route::get('/getPosts', 'UserController@getPosts')->name('getPosts');
 
 Route::post('/updateBio','UserController@changeBio');
 Route::post('/updatePFP','UserController@changePFP');
