@@ -1930,6 +1930,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     user: {}
@@ -1946,6 +1950,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     decrement: function decrement() {
       this.count -= 1;
+    },
+    updateparent: function updateparent(data) {
+      this.posts.unshift(data[0]);
     }
   },
   computed: {
@@ -2450,6 +2457,8 @@ __webpack_require__.r(__webpack_exports__);
         setTimeout(function () {
           _this.show = false;
         }, 100);
+
+        _this.$emit('update', response.data);
       });
     },
     onReset: function onReset(evt) {
@@ -64622,11 +64631,15 @@ var render = function() {
         _c(
           "div",
           [
-            _c("post-form", { attrs: { user: _vm.user } }),
+            _c("post-form", {
+              attrs: { user: _vm.user },
+              on: { update: _vm.updateparent }
+            }),
             _vm._v(" "),
-            _vm._l(_vm.postsFeed, function(postData) {
+            _vm._l(_vm.posts, function(postData) {
               return _c(
                 "div",
+                { attrs: { "v-bind": _vm.posts } },
                 [
                   _c("post", { attrs: { data: postData } }),
                   _vm._v(" "),
@@ -64996,7 +65009,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("small", { staticClass: "text-muted" }, [
-            _vm._v(_vm._s(_vm.timeAgo))
+            _vm._v(
+              _vm._s(_vm.timeAgo == "0 seconds ago" ? "just now" : _vm.timeAgo)
+            )
           ]),
           _vm._v(" "),
           _c(

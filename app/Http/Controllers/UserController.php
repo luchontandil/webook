@@ -16,16 +16,21 @@ class UserController extends Controller
     {
       $post = new Post([
         'content' => $request->content,
-        'likedBy' => $request->likedBy
+        'likedBy' => $request->likedBy,
+        'user_id' => User::find(Auth::user()->id)
       ]);
 
       $post->save();
       $post->refresh();
 
+      $postid = $post->id;
+
       $user = User::find(Auth::user()->id);
       $user->posts()->save($post);
       // $user->save();
       $user->refresh();
+
+      $post = Post::where('_id',$postid)->with('user')->get();
 
       return response()->json($post);
     }
@@ -36,6 +41,7 @@ class UserController extends Controller
       $posts = Post::with('user')
       ->where('user_id',$user->_id)
       ->orWhereIn('user_id', $user->followList)
+      ->orderBy('created_at', 'desc')
       ->get();
       return response()->json($posts);
     }

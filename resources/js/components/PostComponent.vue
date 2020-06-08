@@ -14,7 +14,7 @@
 		 </template>
 
 		 <h5 class="mt-0">{{ data.user.name }}</h5>
-		 <small class="text-muted">{{ timeAgo }}</small>
+		 <small class="text-muted">{{ timeAgo == "0 seconds ago" ? "just now" : timeAgo }}</small>
 		 <p>
 				{{ data.content }}
 				<b-card-img

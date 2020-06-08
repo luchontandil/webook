@@ -4,10 +4,14 @@
             <div class="col-md-12">
               <div>
 
-                <post-form :user="user"></post-form>
+                <post-form
+                :user="user"
+                	@update="updateparent"
+                ></post-form>
 
                 <div
-             		v-for="postData in postsFeed"
+                :v-bind="posts"
+             		 v-for="postData in posts"
              		>
                  <post :data="postData"></post>
                  <br>
@@ -37,7 +41,10 @@
       },
       decrement() {
         this.count -= 1;
-      }
+      },
+      updateparent(data) {
+  			this.posts.unshift(data[0]);
+  		},
     },
     computed: {
       postsFeed(){

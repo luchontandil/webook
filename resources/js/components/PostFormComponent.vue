@@ -54,6 +54,7 @@ export default {
 			this.$http.post("/post", data).then((response)=>{
 				this.post.content = '';
 				setTimeout(()=>{this.show = false},100);
+				this.$emit('update', response.data);
 			});
 		},
 		onReset(evt) {
