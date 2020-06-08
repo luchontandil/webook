@@ -14,7 +14,7 @@
 		v-for="follower in lastSixFollowers"
 		style="font-size: 1.2rem; padding:10px 0px 0px 0px;"
 		>
-		 <followingItem :user="follower"></followingItem>
+		 <followingItem :user="follower" :onlyView="onlyView"></followingItem>
 	 </div>
 	 </b-card-body>
  </div>
@@ -22,7 +22,7 @@
 <script>
 export default {
 	props:{
-		user: Object,
+		data: {},
 	},
 	name: 'user',
 	data() {
@@ -37,18 +37,18 @@ export default {
     }
   },
 	computed: {
-		username(){
-			return this.name
-		},
-		pfp(){
-			return '../'+this.user.pfp;
-		},
 		lastSixFollowers(){
 			return this.followers.reverse().slice(0, 6).filter(item => item!= null);
 		},
 		followersTitle(){
 			return `Following (${this.followers.length})`;
-		}
+		},
+		onlyView(){
+			return Object.assign({},this.data)[1];
+		},
+		user(){
+			return Object.assign({},this.data)[0];
+		},
 	},
 	methods: {
 		forceRerender() {
@@ -59,15 +59,18 @@ export default {
 		}
 	},
 	mounted(){
-		// var getUrl = window.location;
-		// var baseUrl = getUrl .protocol + "/" + getUrl.host + "/";
-
-		axios.get('/getFollowing').then(response => {
+		if(this.onlyView == 1){
+		axios.get(`/getFollowing/${this.user.name}`).then(response => {
 			 console.log(response.data);
-
 			 this.followers = response.data;
-			 // forceRerender();
 		})
+		}
+		else{
+			axios.get(`/getFollowing`).then(response => {
+				 console.log(response.data);
+				 this.followers = response.data;
+			})
+		}
 	}
 }
 </script>

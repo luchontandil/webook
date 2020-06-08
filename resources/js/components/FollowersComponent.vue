@@ -15,7 +15,7 @@
 		style="font-size: 1.2rem; padding:10px 0px 0px 0px;"
 
 		>
-		 <follower :user="follower"></follower>
+		 <follower :user="follower" :onlyView="onlyView"></follower>
 	 </div>
 	 </b-card-body>
  </div>
@@ -23,7 +23,7 @@
 <script>
 export default {
 	props:{
-		user: Object,
+		data: {},
 	},
 	name: 'user',
 	data() {
@@ -42,14 +42,20 @@ export default {
 			return this.name
 		},
 		pfp(){
-			return '../'+this.user.pfp;
+			return this.onlyView!=1 ? '../'+this.user.pfp : '../../'+this.user.pfp;
 		},
 		lastSixFollowers(){
 			return this.followers.reverse().slice(0, 6).filter(item => item!= null);
 		},
 		followersTitle(){
 			return `Followers (${this.followers.length})`;
-		}
+		},
+		onlyView(){
+			return Object.assign({},this.data)[1];
+		},
+		user(){
+			return Object.assign({},this.data)[0];
+		},
 	},
 	methods: {
 		forceRerender() {
@@ -60,15 +66,16 @@ export default {
 		}
 	},
 	mounted(){
-		// var getUrl = window.location;
-		// var baseUrl = getUrl .protocol + "/" + getUrl.host + "/";
-
-		axios.get('/getFollowers').then(response => {
-			 console.log(response.data);
-
+		if(this.onlyView == 1){
+		axios.get(`/getFollowers/${this.user.name}`).then(response => {
 			 this.followers = response.data;
-			 // forceRerender();
 		})
+		}
+		else{
+			axios.get(`/getFollowers`).then(response => {
+				 this.followers = response.data;
+			})
+		}
 	}
 }
 </script>

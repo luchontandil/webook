@@ -5,17 +5,25 @@
               <div>
 
                 <post-form
+                v-if="onlyView!=1"
                 :user="user"
                 	@update="updateparent"
                 ></post-form>
 
                 <div
+                v-if="posts"
                 :v-bind="posts"
              		 v-for="postData in posts"
              		>
                  <post :data="postData"></post>
                  <br>
              	 </div>
+
+              <div
+               v-if="!posts"
+               >
+               <post :data="data"></post>
+              </div>
 
 
                 </div>
@@ -27,7 +35,7 @@
 <script>
   export default {
     props:{
-  		user: {},
+  		data: {},
   	},
     name: 'Counter',
     data() {
@@ -36,12 +44,6 @@
       }
     },
     methods: {
-      increment() {
-        this.count += 1;
-      },
-      decrement() {
-        this.count -= 1;
-      },
       updateparent(data) {
   			this.posts.unshift(data[0]);
   		},
@@ -49,10 +51,19 @@
     computed: {
       postsFeed(){
         return this.posts.reverse();
-      }
+      },
+      user(){
+  			return Object.assign({},this.data)[0];
+  		},
+  		onlyView(){
+  			return Object.assign({},this.data)[1];
+  		},
+  		pfp(){
+  			return this.onlyView!=1 ? '../'+this.user.pfp : '../../'+this.user.pfp;
+  		}
     },
     mounted(){
-      axios.get('/getPosts').then(response => {
+      axios.get('/getPosts/'+this.user.name).then(response => {
          this.posts = response.data;
       })
     }

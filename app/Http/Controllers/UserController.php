@@ -34,15 +34,24 @@ class UserController extends Controller
 
       return response()->json($post);
     }
-    public function getPosts()
+    public function getPosts($username)
     {
-      $user = User::find(Auth::user()->id);
-      // $posts = Post::with('user')->where('user_id',$user->_id)->get();
-      $posts = Post::with('user')
-      ->where('user_id',$user->_id)
-      ->orWhereIn('user_id', $user->followList)
-      ->orderBy('created_at', 'desc')
-      ->get();
+      if($username){
+        $user = User::where('name', $username)->first();
+        $posts = Post::with('user')
+        ->where('user_id',$user->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+      }
+      else{
+        $user = User::find(Auth::user()->id);
+        // $posts = Post::with('user')->where('user_id',$user->_id)->get();
+        $posts = Post::with('user')
+        ->where('user_id',$user->_id)
+        ->orWhereIn('user_id', $user->followList)
+        ->orderBy('created_at', 'desc')
+        ->get();
+      }
       return response()->json($posts);
     }
     public function changePFP(Request $request)
@@ -119,28 +128,48 @@ class UserController extends Controller
 			return response()->json($user->bio);
     }
 
-    public function getFollowers()
+    public function getFollowing($username=null)
     {
       $response = [];
-			$user = User::find(Auth::user()->id);
-      $followers = $user->followers;
-      foreach ($followers as $follower_id) {
-        $follower = User::find($follower_id);
-        array_push($response, $follower);
+      if($username){
+        $user = User::where('name', $username)->first();
+        $following = $user->followList;
+        foreach ($following as $follower_id) {
+          $follower = User::find($follower_id);
+          array_push($response, $follower);
+        }
+      }
+      else{
+        $user = User::find(Auth::user()->id);
+        $following = $user->followList;
+        foreach ($following as $follower_id) {
+          $follower = User::find($follower_id);
+          array_push($response, $follower);
+        }
       }
 			return response()->json($response);
     }
 
-    public function getFollowing()
+    public function getFollowers($username=null)
     {
       $response = [];
-			$user = User::find(Auth::user()->id);
-      $following = $user->followList;
-      foreach ($following as $follower_id) {
-        $follower = User::find($follower_id);
-        array_push($response, $follower);
+      if($username){
+        $user = User::where('name', $username)->first();
+        $followers = $user->followers;
+        foreach ($followers as $follower_id) {
+          $follower = User::find($follower_id);
+          array_push($response, $follower);
+        }
       }
-			return response()->json($response);
+      else{
+        $user = User::find(Auth::user()->id);
+        $followers = $user->followers;
+        foreach ($followers as $follower_id) {
+          $follower = User::find($follower_id);
+          array_push($response, $follower);
+        }
+      }
+      return response()->json($response);
     }
 
     public function follow(Request $request){

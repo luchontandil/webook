@@ -1934,9 +1934,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    user: {}
+    data: {}
   },
   name: 'Counter',
   data: function data() {
@@ -1945,12 +1953,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    increment: function increment() {
-      this.count += 1;
-    },
-    decrement: function decrement() {
-      this.count -= 1;
-    },
     updateparent: function updateparent(data) {
       this.posts.unshift(data[0]);
     }
@@ -1958,12 +1960,21 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     postsFeed: function postsFeed() {
       return this.posts.reverse();
+    },
+    user: function user() {
+      return Object.assign({}, this.data)[0];
+    },
+    onlyView: function onlyView() {
+      return Object.assign({}, this.data)[1];
+    },
+    pfp: function pfp() {
+      return this.onlyView != 1 ? '../' + this.user.pfp : '../../' + this.user.pfp;
     }
   },
   mounted: function mounted() {
     var _this = this;
 
-    axios.get('/getPosts').then(function (response) {
+    axios.get('/getPosts/' + this.user.name).then(function (response) {
       _this.posts = response.data;
     });
   }
@@ -1999,7 +2010,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    user: Object
+    user: Object,
+    onlyView: Number
   },
   data: function data() {
     return {};
@@ -2007,7 +2019,10 @@ __webpack_require__.r(__webpack_exports__);
   watch: {},
   computed: {
     url: function url() {
-      return '/user/' + this.user.name;
+      return "".concat(window.location.origin, "/profile/").concat(this.user.name);
+    },
+    pfp: function pfp() {
+      return this.onlyView != 1 ? this.user.pfp : "../".concat(this.user.pfp);
     }
   },
   methods: {
@@ -2061,7 +2076,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    user: Object
+    data: {}
   },
   name: 'user',
   data: function data() {
@@ -2080,7 +2095,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.name;
     },
     pfp: function pfp() {
-      return '../' + this.user.pfp;
+      return this.onlyView != 1 ? '../' + this.user.pfp : '../../' + this.user.pfp;
     },
     lastSixFollowers: function lastSixFollowers() {
       return this.followers.reverse().slice(0, 6).filter(function (item) {
@@ -2089,6 +2104,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     followersTitle: function followersTitle() {
       return "Followers (".concat(this.followers.length, ")");
+    },
+    onlyView: function onlyView() {
+      return Object.assign({}, this.data)[1];
+    },
+    user: function user() {
+      return Object.assign({}, this.data)[0];
     }
   },
   methods: {
@@ -2100,12 +2121,15 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    // var getUrl = window.location;
-    // var baseUrl = getUrl .protocol + "/" + getUrl.host + "/";
-    axios.get('/getFollowers').then(function (response) {
-      console.log(response.data);
-      _this.followers = response.data; // forceRerender();
-    });
+    if (this.onlyView == 1) {
+      axios.get("/getFollowers/".concat(this.user.name)).then(function (response) {
+        _this.followers = response.data;
+      });
+    } else {
+      axios.get("/getFollowers").then(function (response) {
+        _this.followers = response.data;
+      });
+    }
   }
 });
 
@@ -2139,7 +2163,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    user: Object
+    user: Object,
+    onlyView: Number
   },
   data: function data() {
     return {};
@@ -2147,7 +2172,10 @@ __webpack_require__.r(__webpack_exports__);
   watch: {},
   computed: {
     url: function url() {
-      return '/user/' + this.user.name;
+      return "".concat(window.location.origin, "/profile/").concat(this.user.name);
+    },
+    pfp: function pfp() {
+      return this.onlyView != 1 ? this.user.pfp : "../".concat(this.user.pfp);
     }
   },
   methods: {
@@ -2155,15 +2183,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getFollowers: function getFollowers() {}
   },
-  mounted: function mounted() {// // var getUrl = window.location;
-    // // var baseUrl = getUrl .protocol + "/" + getUrl.host + "/";
-    //
-    // axios.get('/getFollowers').then(response => {
-    // 	 console.log(response.data);
-    //
-    // 	 this.followers = response.data;
-    // 	 // forceRerender();
-  }
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -2200,7 +2220,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    user: Object
+    data: {}
   },
   name: 'user',
   data: function data() {
@@ -2215,12 +2235,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
-    username: function username() {
-      return this.name;
-    },
-    pfp: function pfp() {
-      return '../' + this.user.pfp;
-    },
     lastSixFollowers: function lastSixFollowers() {
       return this.followers.reverse().slice(0, 6).filter(function (item) {
         return item != null;
@@ -2228,6 +2242,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     followersTitle: function followersTitle() {
       return "Following (".concat(this.followers.length, ")");
+    },
+    onlyView: function onlyView() {
+      return Object.assign({}, this.data)[1];
+    },
+    user: function user() {
+      return Object.assign({}, this.data)[0];
     }
   },
   methods: {
@@ -2239,12 +2259,17 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    // var getUrl = window.location;
-    // var baseUrl = getUrl .protocol + "/" + getUrl.host + "/";
-    axios.get('/getFollowing').then(function (response) {
-      console.log(response.data);
-      _this.followers = response.data; // forceRerender();
-    });
+    if (this.onlyView == 1) {
+      axios.get("/getFollowing/".concat(this.user.name)).then(function (response) {
+        console.log(response.data);
+        _this.followers = response.data;
+      });
+    } else {
+      axios.get("/getFollowing").then(function (response) {
+        console.log(response.data);
+        _this.followers = response.data;
+      });
+    }
   }
 });
 
@@ -2287,9 +2312,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    user: Object
+    data: Array
   },
   name: 'user',
   data: function data() {
@@ -2298,21 +2324,30 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    user: function user() {
+      return Object.assign({}, this.data)[0];
+    },
+    onlyView: function onlyView() {
+      return Object.assign({}, this.data)[1];
+    },
     username: function username() {
       return this.name;
     },
     pfp: function pfp() {
-      return '../' + this.user.pfp;
+      return this.onlyView != 1 ? '../' + this.user.pfp : '../../' + this.user.pfp;
     }
   },
   methods: {
     updateparent: function updateparent(data) {
-      this.user = data;
+      this.data[0] = data;
       this.forceRerender();
     },
     forceRerender: function forceRerender() {
       this.forceRender++;
     }
+  },
+  mounted: function mounted() {
+    console.log(this.data);
   }
 });
 
@@ -2378,12 +2413,15 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    pfp: function pfp() {
+      return this.data.onlyView != 1 ? '../' + this.data.user.pfp : '../../' + this.data.user.pfp;
+    },
     timeAgo: function timeAgo() {
       var now = +new Date();
       var date = new Date(this.data.created_at);
       var offset = date.getTimezoneOffset() * 60 * 1000;
       var result = parseInt((now - (date - offset)) / 1000);
-      return result < 3600 ? result > 60 ? "".concat(parseInt(result / 60), " minutes ago") : "".concat(result, " seconds ago") : parseInt(result / 60 / 60) > 1 ? "".concat(parseInt(result / 60 / 60), " hours ago") : "".concat(parseInt(result / 60 / 60), " hour ago");
+      return result < 3600 ? result > 60 ? "".concat(parseInt(result / 60), " minutes ago") : "".concat(result, " seconds ago") : parseInt(result / 60 / 60) > 24 ? parseInt(result / 60 / 60) > 48 ? "".concat(parseInt(result / 60 / 60 / 24), " days ago") : "".concat(parseInt(result / 60 / 60 / 24), " day ago") : parseInt(result / 60 / 60) > 1 ? "".concat(parseInt(result / 60 / 60), " hours ago") : "".concat(parseInt(result / 60 / 60), " hour ago");
     }
   }
 });
@@ -2523,7 +2561,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     search: function search() {
-      this.users = 1; //lamado a la api
+      this.users = 1;
     }
   }
 });
@@ -64631,23 +64669,31 @@ var render = function() {
         _c(
           "div",
           [
-            _c("post-form", {
-              attrs: { user: _vm.user },
-              on: { update: _vm.updateparent }
-            }),
+            _vm.onlyView != 1
+              ? _c("post-form", {
+                  attrs: { user: _vm.user },
+                  on: { update: _vm.updateparent }
+                })
+              : _vm._e(),
             _vm._v(" "),
             _vm._l(_vm.posts, function(postData) {
-              return _c(
-                "div",
-                { attrs: { "v-bind": _vm.posts } },
-                [
-                  _c("post", { attrs: { data: postData } }),
-                  _vm._v(" "),
-                  _c("br")
-                ],
-                1
-              )
-            })
+              return _vm.posts
+                ? _c(
+                    "div",
+                    { attrs: { "v-bind": _vm.posts } },
+                    [
+                      _c("post", { attrs: { data: postData } }),
+                      _vm._v(" "),
+                      _c("br")
+                    ],
+                    1
+                  )
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            !_vm.posts
+              ? _c("div", [_c("post", { attrs: { data: _vm.data } })], 1)
+              : _vm._e()
           ],
           2
         )
@@ -64683,7 +64729,7 @@ var render = function() {
       _c("b-avatar", {
         attrs: {
           id: this.user._id,
-          src: this.user.pfp,
+          src: _vm.pfp,
           href: _vm.url,
           size: "4rem",
           rounded: ""
@@ -64760,7 +64806,11 @@ var render = function() {
                   padding: "10px 0px 0px 0px"
                 }
               },
-              [_c("follower", { attrs: { user: follower } })],
+              [
+                _c("follower", {
+                  attrs: { user: follower, onlyView: _vm.onlyView }
+                })
+              ],
               1
             )
           })
@@ -64799,7 +64849,7 @@ var render = function() {
       _c("b-avatar", {
         attrs: {
           id: this.user.name,
-          src: this.user.pfp,
+          src: _vm.pfp,
           href: _vm.url,
           size: "4rem",
           rounded: ""
@@ -64876,7 +64926,11 @@ var render = function() {
                   padding: "10px 0px 0px 0px"
                 }
               },
-              [_c("followingItem", { attrs: { user: follower } })],
+              [
+                _c("followingItem", {
+                  attrs: { user: follower, onlyView: _vm.onlyView }
+                })
+              ],
               1
             )
           })
@@ -64917,7 +64971,7 @@ var render = function() {
       attrs: {
         user: _vm.user,
         title: _vm.user.name,
-        "img-src": _vm.user.pfp,
+        "img-src": _vm.pfp,
         "img-alt": "Image",
         "img-top": ""
       },
@@ -64926,10 +64980,12 @@ var render = function() {
           key: "footer",
           fn: function() {
             return [
-              _c("sidebar-component", {
-                attrs: { userdata: _vm.user },
-                on: { update: _vm.updateparent }
-              }),
+              _vm.onlyView != 1
+                ? _c("sidebar-component", {
+                    attrs: { userdata: _vm.user },
+                    on: { update: _vm.updateparent }
+                  })
+                : _vm._e(),
               _vm._v(" "),
               _c("small", { staticClass: "text-muted" }, [
                 _vm._v(" Welcome to WeBook")
@@ -64990,11 +65046,7 @@ var render = function() {
                 return [
                   _c("b-avatar", {
                     staticStyle: { "margin-right": "10px" },
-                    attrs: {
-                      variant: "info",
-                      src: _vm.data.user.pfp,
-                      size: "4rem"
-                    }
+                    attrs: { variant: "info", src: _vm.pfp, size: "4rem" }
                   })
                 ]
               },

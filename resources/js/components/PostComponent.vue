@@ -7,7 +7,7 @@
 		 <template v-slot:aside>
 			 <b-avatar
  			variant="info"
- 			:src="data.user.pfp"
+ 			:src="pfp"
  			style="margin-right:10px"
  			size="4rem"
  			></b-avatar>
@@ -52,6 +52,9 @@
       }
     },
 		computed: {
+			pfp(){
+  			return this.data.onlyView!=1 ? '../'+this.data.user.pfp : '../../'+this.data.user.pfp;
+  		},
 			timeAgo(){
 				var now = +new Date();
 				var date = new Date(this.data.created_at);
@@ -59,7 +62,9 @@
 
 				var result = parseInt(((now - (date-offset))/1000));
 
-				return result<3600 ? ((result)>60 ? `${parseInt((result/60))} minutes ago`: `${result} seconds ago`) : parseInt((result/60)/60)>1 ? `${parseInt((result/60)/60)} hours ago`:`${parseInt((result/60)/60)} hour ago`;
+				return result<3600 ? ((result)>60 ? `${parseInt((result/60))} minutes ago`: `${result} seconds ago`) :
+				 (parseInt((result/60)/60)>24 ? parseInt((result/60)/60)>48 ? `${parseInt(((result/60)/60)/24)} days ago`:`${parseInt(((result/60)/60)/24)} day ago`
+				 : parseInt((result/60)/60)>1 ? `${parseInt((result/60)/60)} hours ago`:`${parseInt((result/60)/60)} hour ago`);
 			}
 
 		}

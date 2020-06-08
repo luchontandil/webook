@@ -4,7 +4,7 @@
 		:key="forceRender"
 		:title="user.name"
 		 style="margin-bottom:15px"
-		:img-src="user.pfp"
+		:img-src="pfp"
 		img-alt="Image"
 		img-top
 	>
@@ -17,6 +17,7 @@
     </b-card-text>
     <template v-slot:footer>
 			<sidebar-component
+				v-if="onlyView!=1"
 				:userdata=user
 				@update="updateparent"
 			>
@@ -29,7 +30,7 @@
 <script>
 export default {
 	props:{
-		user: Object
+		data: Array,
 	},
 	name: 'user',
 	data() {
@@ -38,21 +39,30 @@ export default {
 		}
 	},
 	computed: {
+		user(){
+			return Object.assign({},this.data)[0];
+		},
+		onlyView(){
+			return Object.assign({},this.data)[1];
+		},
 		username(){
 			return this.name
 		},
 		pfp(){
-			return '../'+this.user.pfp;
+			return this.onlyView!=1 ? '../'+this.user.pfp : '../../'+this.user.pfp;
 		}
 	},
 	methods: {
 		updateparent(data) {
-			this.user = data;
+			this.data[0] = data;
 			this.forceRerender();
 		},
 		forceRerender() {
       this.forceRender++;
     }
+	},
+	mounted(){
+		console.log(this.data)
 	}
 }
 </script>

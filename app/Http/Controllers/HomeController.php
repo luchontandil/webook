@@ -33,4 +33,9 @@ class HomeController extends Controller
       ->where('_id', "!=", Auth::user()->id)
       ->get()]);
     }
+    public function profile($username){
+      return view('profile', ["result" => User::where('name', $username)->get(),
+      "onlyView"=> true]);
+    }
+
 }

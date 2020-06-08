@@ -2,7 +2,7 @@
 	<div>
 		<b-avatar
 		:id="this.user.name"
-		:src="this.user.pfp"
+		:src="pfp"
 		:href="url"
 		size="4rem"
 		rounded>
@@ -19,6 +19,7 @@
 export default {
 	props:{
 		user: Object,
+		onlyView: Number
 	},
 	data() {
 		return {
@@ -29,8 +30,11 @@ export default {
   },
 	computed: {
 		url(){
-			return '/user/'+this.user.name;
-		}
+			return `${window.location.origin}/profile/${this.user.name}`;
+		},
+		pfp(){
+			return this.onlyView!=1 ? this.user.pfp : `../${this.user.pfp}`;
+		},
 	},
 	methods: {
 		forceRerender() {
@@ -41,14 +45,6 @@ export default {
 		}
 	},
 	mounted(){
-		// // var getUrl = window.location;
-		// // var baseUrl = getUrl .protocol + "/" + getUrl.host + "/";
-		//
-		// axios.get('/getFollowers').then(response => {
-		// 	 console.log(response.data);
-		//
-		// 	 this.followers = response.data;
-		// 	 // forceRerender();
 
 	}
 }

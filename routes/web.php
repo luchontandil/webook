@@ -19,10 +19,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/search/{username}', 'HomeController@search')->name('search');
+Route::get('/profile/{username}', 'HomeController@profile')->name('profile');
+
 Route::get('/getID', 'UserController@getID')->name('getID');
 Route::get('/getFollowers', 'UserController@getFollowers')->name('getFollowers');
+Route::get('/getFollowers/{username}', 'UserController@getFollowers')->name('getFollowers');
 Route::get('/getFollowing', 'UserController@getFollowing')->name('getFollowing');
+Route::get('/getFollowing/{username}', 'UserController@getFollowing')->name('getFollowing');
 Route::get('/getPosts', 'UserController@getPosts')->name('getPosts');
+Route::get('/getPosts/{username}', 'UserController@getPosts')->name('getPosts');
 
 Route::post('/updateBio','UserController@changeBio');
 Route::post('/updatePFP','UserController@changePFP');

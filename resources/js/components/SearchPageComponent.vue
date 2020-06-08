@@ -35,7 +35,6 @@ export default {
 	methods: {
 		search() {
 			this.users = 1;
-			//lamado a la api
 		}
 	}
 }
