@@ -8,6 +8,7 @@
 			 <b-avatar
  			variant="info"
  			:src="pfp"
+			:href="url"
  			style="margin-right:10px"
  			size="4rem"
  			></b-avatar>
@@ -52,6 +53,9 @@
       }
     },
 		computed: {
+			url(){
+				return `${window.location.origin}/profile/${this.data.user.name}`;
+			},
 			pfp(){
   			return this.data.onlyView!=1 ? '../'+this.data.user.pfp : '../../'+this.data.user.pfp;
   		},

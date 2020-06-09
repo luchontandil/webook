@@ -1,6 +1,6 @@
 <template>
 	<b-list-group-item class="d-flex align-items-center">
-		<b-avatar :key="forceRender" variant="info" :src="pfpPath" class="mr-3" size="6rem"></b-avatar>
+		<b-avatar :key="forceRender" variant="info" :src="pfpPath" :href="url" class="mr-3" size="6rem"></b-avatar>
 		<h4 class="mr-auto">{{ user.name }}</h4>
 
 		<span class="mr-auto">{{ user.bio }}</span>
@@ -63,7 +63,10 @@ export default {
 	computed: {
 		status(){
 			return this.isFollow ? "follow" : "unfollow";
-		}
+		},
+		url(){
+			return `${window.location.origin}/profile/${this.user.name}`;
+		},
 	},
 	mounted(){
 		var getUrl = window.location;

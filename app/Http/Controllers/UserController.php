@@ -36,7 +36,7 @@ class UserController extends Controller
     }
     public function getPosts($username)
     {
-      if($username){
+      if( $username != Auth::user()->name){
         $user = User::where('name', $username)->first();
         $posts = Post::with('user')
         ->where('user_id',$user->id)

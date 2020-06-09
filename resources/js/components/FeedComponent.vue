@@ -20,9 +20,9 @@
              	 </div>
 
               <div
-               v-if="!posts"
+               v-if="!posts[0]"
                >
-               <post :data="data"></post>
+               <p class="text-muted text-center">This user doesn't have any posts yet :(</p>
               </div>
 
 

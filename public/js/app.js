@@ -2395,6 +2395,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     data: {}
@@ -2412,6 +2413,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    url: function url() {
+      return "".concat(window.location.origin, "/profile/").concat(this.data.user.name);
+    },
     pfp: function pfp() {
       return this.data.onlyView != 1 ? '../' + this.data.user.pfp : '../../' + this.data.user.pfp;
     },
@@ -2630,6 +2634,9 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     status: function status() {
       return this.isFollow ? "follow" : "unfollow";
+    },
+    url: function url() {
+      return "".concat(window.location.origin, "/profile/").concat(this.user.name);
     }
   },
   mounted: function mounted() {
@@ -64693,8 +64700,12 @@ var render = function() {
                 : _vm._e()
             }),
             _vm._v(" "),
-            !_vm.posts
-              ? _c("div", [_c("post", { attrs: { data: _vm.data } })], 1)
+            !_vm.posts[0]
+              ? _c("div", [
+                  _c("p", { staticClass: "text-muted text-center" }, [
+                    _vm._v("This user doesn't have any posts yet :(")
+                  ])
+                ])
               : _vm._e()
           ],
           2
@@ -65047,7 +65058,12 @@ var render = function() {
                 return [
                   _c("b-avatar", {
                     staticStyle: { "margin-right": "10px" },
-                    attrs: { variant: "info", src: _vm.pfp, size: "4rem" }
+                    attrs: {
+                      variant: "info",
+                      src: _vm.pfp,
+                      href: _vm.url,
+                      size: "4rem"
+                    }
                   })
                 ]
               },
@@ -65270,7 +65286,12 @@ var render = function() {
       _c("b-avatar", {
         key: _vm.forceRender,
         staticClass: "mr-3",
-        attrs: { variant: "info", src: _vm.pfpPath, size: "6rem" }
+        attrs: {
+          variant: "info",
+          src: _vm.pfpPath,
+          href: _vm.url,
+          size: "6rem"
+        }
       }),
       _vm._v(" "),
       _c("h4", { staticClass: "mr-auto" }, [_vm._v(_vm._s(_vm.user.name))]),
