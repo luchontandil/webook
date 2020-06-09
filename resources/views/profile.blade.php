@@ -7,7 +7,7 @@
 
 		<div class="col-md-3">
 			<main-avatar
-			:data="[{{json_encode($result[0])}}, {{$onlyView}}]"
+			:userdata="[{{json_encode($result[0])}}, {{$onlyView}}]"
 			></main-avatar>
 		</div>
 

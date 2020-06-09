@@ -34,6 +34,10 @@ class HomeController extends Controller
       ->get()]);
     }
     public function profile($username){
+      if(Auth::user() && Auth::user()->name == $username){
+        header("Location: /home");
+        exit;
+      }
       return view('profile', ["result" => User::where('name', $username)->get(),
       "onlyView"=> true]);
     }

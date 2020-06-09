@@ -1,7 +1,6 @@
 <template>
 	<b-card
 		:user="user"
-		:key="forceRender"
 		:title="user.name"
 		 style="margin-bottom:15px"
 		:img-src="pfp"
@@ -30,20 +29,19 @@
 <script>
 export default {
 	props:{
-		data: Array,
+		userdata: {},
 	},
-	name: 'user',
 	data() {
 		return {
-			forceRender: 0,
+			forceRender: true,
 		}
 	},
 	computed: {
 		user(){
-			return Object.assign({},this.data)[0];
+			return this.forceRender ? Object.assign({},this.userdata)[0] : Object.assign({},this.userdata)[0];
 		},
 		onlyView(){
-			return Object.assign({},this.data)[1];
+			return Object.assign({},this.userdata)[1];
 		},
 		username(){
 			return this.name
@@ -54,15 +52,17 @@ export default {
 	},
 	methods: {
 		updateparent(data) {
-			this.data[0] = data;
+			this.userdata[0] =  data;
+			// this.userdata.splice(this.forceRender+2)
 			this.forceRerender();
+			console.log(this.userdata[0]);
+			console.log(this.forceRender);
 		},
 		forceRerender() {
-      this.forceRender++;
+      this.forceRender= !this.forceRender;
     }
 	},
 	mounted(){
-		console.log(this.data)
 	}
 }
 </script>

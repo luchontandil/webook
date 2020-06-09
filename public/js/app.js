@@ -2312,23 +2312,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    data: Array
+    userdata: {}
   },
-  name: 'user',
   data: function data() {
     return {
-      forceRender: 0
+      forceRender: true
     };
   },
   computed: {
     user: function user() {
-      return Object.assign({}, this.data)[0];
+      return this.forceRender ? Object.assign({}, this.userdata)[0] : Object.assign({}, this.userdata)[0];
     },
     onlyView: function onlyView() {
-      return Object.assign({}, this.data)[1];
+      return Object.assign({}, this.userdata)[1];
     },
     username: function username() {
       return this.name;
@@ -2339,16 +2337,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     updateparent: function updateparent(data) {
-      this.data[0] = data;
+      this.userdata[0] = data; // this.userdata.splice(this.forceRender+2)
+
       this.forceRerender();
+      console.log(this.userdata[0]);
+      console.log(this.forceRender);
     },
     forceRerender: function forceRerender() {
-      this.forceRender++;
+      this.forceRender = !this.forceRender;
     }
   },
-  mounted: function mounted() {
-    console.log(this.data);
-  }
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -2759,12 +2758,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     userdata: Object
   },
   data: function data() {
     return {
+      show: false,
       pfpPath: null,
       pfpfile: null,
       variant: 'dark',
@@ -2801,18 +2803,18 @@ __webpack_require__.r(__webpack_exports__);
 
         if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
           filename = filename.substring(1);
-        } // alert(filename);
-
+        }
 
         var data = new FormData();
         data.append('ext', filename.split('.').pop());
         data.append('photo', this.pfpfile);
         data.append('userid', this.userdata._id);
+        this.show = true;
         this.$http.post("/updatePFP", data).then(function (response) {
           _this2.pfpPath = response.data;
           _this2.userdata.pfp = response.data;
         }).then(function () {
-          console.log(_this2.pfpPath);
+          _this2.show = false;
         });
       }
     }
@@ -64966,7 +64968,6 @@ var render = function() {
   return _c(
     "b-card",
     {
-      key: _vm.forceRender,
       staticStyle: { "margin-bottom": "15px" },
       attrs: {
         user: _vm.user,
@@ -65412,9 +65413,19 @@ var render = function() {
               _c("h5", { staticClass: "mt-0" }, [_vm._v("Profile Picture")]),
               _vm._v(" "),
               _c(
-                "b-button",
-                { attrs: { variant: "info" }, on: { click: _vm.changepfp } },
-                [_vm._v("Upload\n      ")]
+                "b-overlay",
+                { attrs: { show: _vm.show, rounded: "sm" } },
+                [
+                  _c(
+                    "b-button",
+                    {
+                      attrs: { variant: "info" },
+                      on: { click: _vm.changepfp }
+                    },
+                    [_vm._v("\n        Upload\n        ")]
+                  )
+                ],
+                1
               ),
               _vm._v(" "),
               _c(

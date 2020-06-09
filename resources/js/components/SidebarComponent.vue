@@ -15,20 +15,22 @@
           <b-form-select id="backdrop-variant" v-model="variant" :options="variants"></b-form-select>
         </b-form-group> -->
          <h5 class="mt-0">Profile Picture</h5>
-        <b-button
-          variant="info"
-          @click=changepfp
-        >Upload
-        </b-button>
-        <div style=" visibility: hidden; height:0px;">
-         <b-form-file
-          id="fileUpload"
-          v-model="pfpfile"
-          class="mt-3"
-          @input="uploadpfp"
-          accept="image/*"
-          ></b-form-file>
-
+         <b-overlay :show="show" rounded="sm">
+          <b-button
+            variant="info"
+            @click=changepfp
+          >
+          Upload
+          </b-button>
+        </b-overlay>
+        <div style="visibility: hidden; height:0px;">
+           <b-form-file
+            id="fileUpload"
+            v-model="pfpfile"
+            class="mt-3"
+            @input="uploadpfp"
+            accept="image/*"
+            ></b-form-file>
         </div>
         <div class="mt-3">
           <h5 class="mt-0">Edit your biography</h5>
@@ -59,6 +61,7 @@
     },
     data() {
       return {
+        show:false,
         pfpPath: null,
         pfpfile: null,
         variant: 'dark',
@@ -104,18 +107,17 @@
           if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
               filename = filename.substring(1);
           }
-          // alert(filename);
-
           const data = new FormData();
           data.append('ext', filename.split('.').pop());
           data.append('photo', this.pfpfile);
           data.append('userid', this.userdata._id);
-
+          this.show = true;
           this.$http.post("/updatePFP", data).then((response)=>{
+
               this.pfpPath = response.data;
               this.userdata.pfp = response.data;
           }).then(()=>{
-              console.log(this.pfpPath);
+              this.show = false;
           });
 
         }

@@ -5,7 +5,7 @@
 	<div class="row left">
 		<div class="col-md-3">
 			<main-avatar
-			:data="[{{ json_encode(auth()->user()) }}]"
+			:userdata="[{{ json_encode(auth()->user()) }}]"
 			></main-avatar>
 		</div>
 		<div class="col-md-6 justify-content-center">
