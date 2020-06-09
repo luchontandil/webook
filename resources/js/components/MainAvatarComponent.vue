@@ -18,7 +18,6 @@
 			<sidebar-component
 				v-if="onlyView!=1"
 				:userdata=user
-				@update="updateparent"
 			>
 			</sidebar-component>
       <small class="text-muted"> Welcome to WeBook</small>
@@ -51,18 +50,17 @@ export default {
 		}
 	},
 	methods: {
-		updateparent(data) {
-			this.userdata[0] =  data;
-			// this.userdata.splice(this.forceRender+2)
-			this.forceRerender();
-			console.log(this.userdata[0]);
-			console.log(this.forceRender);
-		},
 		forceRerender() {
       this.forceRender= !this.forceRender;
     }
 	},
 	mounted(){
+		this.$root.$on('update',data => {
+			this.userdata[0] =  data;
+			// this.userdata.splice(this.forceRender+2)
+			this.forceRerender();
+			this.$root.$emit('sendData', data);
+    });
 	}
 }
 </script>

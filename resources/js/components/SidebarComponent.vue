@@ -91,13 +91,12 @@
         this.$http.post("/updateBio", data).then((response)=>{
             this.userdata.bio = response.data;
         });
-        console.log(text);
       },
 			changepfp() {
   			document.getElementById("fileUpload").click();
 			},
       update(){
-        this.$emit('update', this.userdata);
+        this.$root.$emit('update', this.userdata);
       },
       uploadpfp(){
         if(this.pfpfile){

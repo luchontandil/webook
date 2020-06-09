@@ -15,7 +15,9 @@
                 :v-bind="posts"
              		 v-for="postData in posts"
              		>
-                 <post :data="postData"></post>
+                 <post
+                 :data="postData"
+                 ></post>
                  <br>
              	 </div>
 
@@ -41,6 +43,7 @@
     data() {
       return {
         posts: [],
+        reload: false
       }
     },
     methods: {
@@ -50,7 +53,7 @@
     },
     computed: {
       postsFeed(){
-        return this.posts.reverse();
+        return reload ? this.posts.reverse(): this.posts.reverse();
       },
       user(){
   			return Object.assign({},this.data)[0];
@@ -66,6 +69,14 @@
       axios.get('/getPosts/'+this.user.name).then(response => {
          this.posts = response.data;
       })
+      console.log('estoy en el feed')
+			this.$root.$on('sendData', data => {
+        axios.get('/getPosts/'+this.user.name).then(response => {
+           this.posts = response.data;
+           this.reload = !this.reload;
+        })
+	    });
+
     }
   }
 </script>

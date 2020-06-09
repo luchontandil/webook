@@ -1942,6 +1942,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     data: {}
@@ -1949,7 +1951,8 @@ __webpack_require__.r(__webpack_exports__);
   name: 'Counter',
   data: function data() {
     return {
-      posts: []
+      posts: [],
+      reload: false
     };
   },
   methods: {
@@ -1959,7 +1962,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     postsFeed: function postsFeed() {
-      return this.posts.reverse();
+      return reload ? this.posts.reverse() : this.posts.reverse();
     },
     user: function user() {
       return Object.assign({}, this.data)[0];
@@ -1976,6 +1979,13 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get('/getPosts/' + this.user.name).then(function (response) {
       _this.posts = response.data;
+    });
+    console.log('estoy en el feed');
+    this.$root.$on('sendData', function (data) {
+      axios.get('/getPosts/' + _this.user.name).then(function (response) {
+        _this.posts = response.data;
+        _this.reload = !_this.reload;
+      });
     });
   }
 });
@@ -2311,7 +2321,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     userdata: {}
@@ -2336,18 +2345,21 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    updateparent: function updateparent(data) {
-      this.userdata[0] = data; // this.userdata.splice(this.forceRender+2)
-
-      this.forceRerender();
-      console.log(this.userdata[0]);
-      console.log(this.forceRender);
-    },
     forceRerender: function forceRerender() {
       this.forceRender = !this.forceRender;
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$root.$on('update', function (data) {
+      _this.userdata[0] = data; // this.userdata.splice(this.forceRender+2)
+
+      _this.forceRerender();
+
+      _this.$root.$emit('sendData', data);
+    });
+  }
 });
 
 /***/ }),
@@ -2396,6 +2408,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     data: {}
@@ -2405,11 +2418,8 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   methods: {
-    increment: function increment() {
-      this.count += 1;
-    },
-    decrement: function decrement() {
-      this.count -= 1;
+    updatePost: function updatePost() {
+      console.log('Estoy en el post');
     }
   },
   computed: {
@@ -2425,6 +2435,12 @@ __webpack_require__.r(__webpack_exports__);
       var offset = date.getTimezoneOffset() * 60 * 1000;
       var result = parseInt((now - (date - offset)) / 1000);
       return result < 3600 ? result > 60 ? "".concat(parseInt(result / 60), " minutes ago") : "".concat(result, " seconds ago") : parseInt(result / 60 / 60) > 24 ? parseInt(result / 60 / 60) > 48 ? "".concat(parseInt(result / 60 / 60 / 24), " days ago") : "".concat(parseInt(result / 60 / 60 / 24), " day ago") : parseInt(result / 60 / 60) > 1 ? "".concat(parseInt(result / 60 / 60), " hours ago") : "".concat(parseInt(result / 60 / 60), " hour ago");
+    },
+    mounted: function mounted() {
+      this.$root.$on('actualizarPFPpost', function (data) {
+        console.log('Estoy en el post');
+        console.log(data);
+      });
     }
   }
 });
@@ -2792,13 +2808,12 @@ __webpack_require__.r(__webpack_exports__);
       this.$http.post("/updateBio", data).then(function (response) {
         _this.userdata.bio = response.data;
       });
-      console.log(text);
     },
     changepfp: function changepfp() {
       document.getElementById("fileUpload").click();
     },
     update: function update() {
-      this.$emit('update', this.userdata);
+      this.$root.$emit('update', this.userdata);
     },
     uploadpfp: function uploadpfp() {
       var _this2 = this;
@@ -64993,10 +65008,7 @@ var render = function() {
           fn: function() {
             return [
               _vm.onlyView != 1
-                ? _c("sidebar-component", {
-                    attrs: { userdata: _vm.user },
-                    on: { update: _vm.updateparent }
-                  })
+                ? _c("sidebar-component", { attrs: { userdata: _vm.user } })
                 : _vm._e(),
               _vm._v(" "),
               _c("small", { staticClass: "text-muted" }, [
@@ -65046,7 +65058,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "b-card-body",
-    { attrs: { "body-bg-variant": "light" } },
+    {
+      attrs: { "body-bg-variant": "light" },
+      on: { actualizarPFPpost: _vm.updatePost }
+    },
     [
       _c(
         "b-media",
