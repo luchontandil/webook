@@ -8,6 +8,7 @@ Vue.prototype.$http = window.axios;
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
+import "./components/CommentFormCss.css"
 
 Vue.use(BootstrapVue)
 
@@ -19,6 +20,7 @@ Vue.component('search-item-component', require('./components/SearchPageItemCompo
 
 Vue.component('post-form', require('./components/PostFormComponent.vue').default);
 Vue.component('post', require('./components/PostComponent.vue').default);
+Vue.component('coment-form', require('./components/ComentFormComponent.vue').default);
 
 Vue.component('main-avatar', require('./components/MainAvatarComponent.vue').default);
 Vue.component('followers', require('./components/FollowersComponent.vue').default);

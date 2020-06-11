@@ -12,6 +12,9 @@ class UserController extends Controller
     public function getID(Request $request){
         return User::find(Auth::user()->id)->id;
     }
+    public function user(){
+      return Auth::user();
+    }
     public function post(Request $request)
     {
       $post = new Post([

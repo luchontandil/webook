@@ -11,12 +11,13 @@
                 ></post-form>
 
                 <div
-                v-if="posts"
+                v-if="posts && render"
                 :v-bind="posts"
              		 v-for="postData in posts"
              		>
                  <post
                  :data="postData"
+                 :datos="datos"
                  ></post>
                  <br>
              	 </div>
@@ -38,12 +39,15 @@
   export default {
     props:{
   		data: {},
+
   	},
     name: 'Counter',
     data() {
       return {
+        datos: {},
         posts: [],
-        reload: false
+        reload: false,
+        render: false
       }
     },
     methods: {
@@ -69,11 +73,21 @@
       axios.get('/getPosts/'+this.user.name).then(response => {
          this.posts = response.data;
       })
-      console.log('estoy en el feed')
+      this.$http.get("/user").then((response)=>{
+        this.datos = response.data;
+        this.render = true;
+      });
 			this.$root.$on('sendData', data => {
         axios.get('/getPosts/'+this.user.name).then(response => {
            this.posts = response.data;
            this.reload = !this.reload;
+        }).then(()=>{
+          this.$http.get("/user").then((response)=>{
+            this.$root.$emit('actualizarDatosdelquecomenta',response.data);
+          }).then(()=>{
+            // this.$root.$emit('actualizarDatosdelquecomenta', this.datos);
+          })
+
         })
 	    });
 

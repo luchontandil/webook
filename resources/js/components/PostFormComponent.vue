@@ -2,7 +2,7 @@
 <div>
 	<b-overlay :show="show" rounded="sm">
 	<b-card-body body-bg-variant="light">
-		<b-form @submit="onSubmit" @reset="onReset">
+		<b-form @submit="onSubmit">
 			<b-form-group id="input-group-1" label-for="input-1" description="Share something with your friends!">
 				<div>
 					<b-form-textarea
@@ -57,19 +57,6 @@ export default {
 				this.$emit('update', response.data);
 			});
 		},
-		onReset(evt) {
-			evt.preventDefault()
-			// Reset our form values
-			this.form.email = ''
-			this.form.name = ''
-			this.form.food = null
-			this.form.checked = []
-			// Trick to reset/clear native browser form validation state
-			this.show = false
-			this.$nextTick(() => {
-				this.show = true
-			})
-		}
 	}
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
+	<div>
 	<b-card-body
 		body-bg-variant="light"
-		 @actualizarPFPpost="updatePost"
 	>
 
 	<b-media>
@@ -27,17 +27,19 @@
 				</b-card-img>
 		 </p>
 	</b-media>
-
-	<div style="margin-top: 5px">
-	</div>
+	<coment-form :user="datos" :postData="data" ></coment-form>
 	</b-card-body>
 
+		<div style="margin-top: 5px">
+		</div>
+	</div>
 </template>
 
 <script>
   export default {
     props:{
   		data: {},
+			datos: {}
   	},
     name: 'Counter',
     data() {
@@ -68,12 +70,14 @@
 				 (parseInt((result/60)/60)>24 ? parseInt((result/60)/60)>48 ? `${parseInt(((result/60)/60)/24)} days ago`:`${parseInt(((result/60)/60)/24)} day ago`
 				 : parseInt((result/60)/60)>1 ? `${parseInt((result/60)/60)} hours ago`:`${parseInt((result/60)/60)} hour ago`);
 			},
-			mounted(){
-				this.$root.$on('actualizarPFPpost', data => {
-					console.log('Estoy en el post');
-					console.log(data);
-		    });
-			}
+		},
+		mounted(){
+			this.$root.$on('actualizarDatosdelquecomenta', data => {
+					 // this.reload = !this.reload;
+					 console.log('PFP en el POST '+data.pfp);
+					 this.datos = data;
+					 // this.$root.$emit('actualizarlascosasdelPOST', data);
+			});
 		}
   }
 </script>

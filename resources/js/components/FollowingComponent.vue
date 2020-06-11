@@ -61,13 +61,11 @@ export default {
 	mounted(){
 		if(this.onlyView == 1){
 		axios.get(`/getFollowing/${this.user.name}`).then(response => {
-			 console.log(response.data);
 			 this.followers = response.data;
 		})
 		}
 		else{
 			axios.get(`/getFollowing`).then(response => {
-				 console.log(response.data);
 				 this.followers = response.data;
 			})
 		}
