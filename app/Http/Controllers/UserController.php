@@ -70,6 +70,15 @@ class UserController extends Controller
       }
       return response()->json($res);
     }
+    public function deleteComment(Request $request){
+      $res = 0;
+      $user = User::find(Auth::user()->id);
+      if($user){
+        $comment_id = $request->comment_id;
+        $res = Comment::where('_id',$comment_id)->delete();
+      }
+      return response()->json($res);
+    }
 
     public function getPosts($username)
     {

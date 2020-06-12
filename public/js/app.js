@@ -2034,8 +2034,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    loggedUser: {},
     commentData: {}
   },
   data: function data() {
@@ -2066,7 +2072,19 @@ __webpack_require__.r(__webpack_exports__);
       return result < 3600 ? result > 60 ? "".concat(parseInt(result / 60), " minutes ago") : "".concat(result, " seconds ago") : parseInt(result / 60 / 60) > 24 ? parseInt(result / 60 / 60) > 48 ? "".concat(parseInt(result / 60 / 60 / 24), " days ago") : "".concat(parseInt(result / 60 / 60 / 24), " day ago") : parseInt(result / 60 / 60) > 1 ? "".concat(parseInt(result / 60 / 60), " hours ago") : "".concat(parseInt(result / 60 / 60), " hour ago");
     }
   },
-  methods: {},
+  methods: {
+    deleteComment: function deleteComment() {
+      var _this = this;
+
+      var data = new FormData();
+      data.append('comment_id', this.commentData._id);
+      this.$http.post("/deleteComment", data).then(function (response) {
+        if (response.data == 1) {
+          _this.$root.$emit('deleteComment', _this.commentData._id);
+        }
+      });
+    }
+  },
   mounted: function mounted() {// this.$root.$on('actualizarDatosdelquecomenta', data => {
     //  // this.reload = !this.reload;
     //  this.user = data;
@@ -2087,6 +2105,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -2622,6 +2641,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    loggedUser: {},
     data: {},
     datos: {}
   },
@@ -2676,6 +2696,12 @@ __webpack_require__.r(__webpack_exports__);
         // console.log(data);
         _this2.data.comments.push(data[0]);
       }
+    });
+    this.$root.$on('deleteComment', function (data) {
+      // this.data.comments.
+      _this2.data.comments = _this2.data.comments.filter(function (item) {
+        return item._id !== data;
+      }); // this.reload = !this.reload;
     });
   }
 });
@@ -65070,6 +65096,30 @@ var render = function() {
     },
     [
       _vm._v(" "),
+      _vm.commentData.user._id == _vm.loggedUser._id
+        ? _c(
+            "div",
+            { staticClass: "h2 mb-0" },
+            [
+              _c(
+                "b-link",
+                {
+                  staticStyle: { float: "right" },
+                  on: { click: _vm.deleteComment }
+                },
+                [
+                  _c("b-icon", {
+                    staticStyle: { color: "black" },
+                    attrs: { icon: "x-square", "font-scale": "0.6" }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c("h5", { staticClass: "mt-0" }, [_vm._v(_vm._s(_vm.user.name))]),
       _vm._v(" "),
       _c("small", { staticClass: "text-muted" }, [
@@ -65128,7 +65178,11 @@ var render = function() {
                     { attrs: { "v-bind": _vm.posts } },
                     [
                       _c("post", {
-                        attrs: { data: postData, datos: _vm.datos }
+                        attrs: {
+                          loggedUser: _vm.user,
+                          data: postData,
+                          datos: _vm.datos
+                        }
                       }),
                       _vm._v(" "),
                       _c("br")
@@ -65549,7 +65603,7 @@ var render = function() {
               _vm._v(" "),
               _c("p"),
               _c("div", { staticStyle: { "word-break": "break-all" } }, [
-                _vm._v("\n\t\t\t\t" + _vm._s(_vm.data.content) + "\n\t\t\t")
+                _vm._v("\n\t\t\t\t" + _vm._s(_vm.data.content) + "\n\t\t\t\t")
               ]),
               _vm._v(" "),
               _vm.data.image
@@ -65571,7 +65625,14 @@ var render = function() {
                   [
                     _c(
                       "b-list-group-item",
-                      [_c("comment", { attrs: { commentData: comment } })],
+                      [
+                        _c("comment", {
+                          attrs: {
+                            loggedUser: _vm.loggedUser,
+                            commentData: comment
+                          }
+                        })
+                      ],
                       1
                     )
                   ],

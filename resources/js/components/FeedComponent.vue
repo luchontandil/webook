@@ -16,6 +16,7 @@
              		 v-for="postData in posts"
              		>
                  <post
+                 :loggedUser="user"
                  :data="postData"
                  :datos="datos"
                  ></post>

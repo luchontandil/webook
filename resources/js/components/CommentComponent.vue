@@ -10,6 +10,11 @@
 				 ></b-avatar>
       </template>
 
+			<div v-if="commentData.user._id == loggedUser._id" class="h2 mb-0">
+			 <b-link style="float:right;" @click="deleteComment">
+				 <b-icon style="color:black;" icon="x-square" font-scale="0.6"></b-icon>
+			 </b-link>
+			</div>
       <h5 class="mt-0">{{ user.name }}</h5>
 			<small class="text-muted">{{ timeAgo == "0 seconds ago" ? "just now" : timeAgo }}</small>
       <p class="mb-0" style="word-break: break-all;">
@@ -21,6 +26,7 @@
 <script>
 export default {
 	props:{
+		loggedUser:{},
 		commentData: {}
 	},
 	data() {
@@ -56,7 +62,16 @@ export default {
 		},
 	},
 	methods: {
+		deleteComment(){
+			const data = new FormData();
+			data.append('comment_id', this.commentData._id);
 
+			this.$http.post("/deleteComment", data).then((response)=>{
+					if(response.data == 1){
+						this.$root.$emit('deleteComment',this.commentData._id);
+					}
+			});
+		}
 	},
 	mounted(){
 		// this.$root.$on('actualizarDatosdelquecomenta', data => {

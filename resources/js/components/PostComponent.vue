@@ -24,7 +24,7 @@
 		 <p>
 			 <div style="word-break: break-all;">
 				{{ data.content }}
-			</div>
+				</div>
 				<b-card-img
 					v-if="data.image"
 					:src="data.image"
@@ -38,7 +38,7 @@
 			:key="i"
 		 >
 		 <b-list-group-item>
-			 <comment :commentData="comment"></comment>
+			 <comment :loggedUser="loggedUser" :commentData="comment"></comment>
 		 </b-list-group-item>
 	 	</ul>
 
@@ -54,6 +54,7 @@
 <script>
   export default {
     props:{
+			loggedUser: {},
   		data: {},
 			datos: {},
   	},
@@ -112,6 +113,11 @@
 					// console.log(data);
 					this.data.comments.push(data[0]);
 				}
+			})
+			this.$root.$on('deleteComment', data => {
+				// this.data.comments.
+				this.data.comments = this.data.comments.filter(item => item._id !== data)
+        // this.reload = !this.reload;
 			})
 		}
   }
