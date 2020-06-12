@@ -89,7 +89,10 @@
 
         })
 	    });
-
+      this.$root.$on('deletePost', data => {
+        this.posts = this.posts.filter(item => item._id !== data)
+        this.reload = !this.reload;
+			})
     }
   }
 </script>

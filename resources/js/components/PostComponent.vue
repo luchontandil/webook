@@ -14,7 +14,11 @@
  			size="4rem"
  			></b-avatar>
 		 </template>
-
+		 <div v-if="data.user._id == datos._id" class="h2 mb-0">
+		 	<b-link style="float:right;" @click="deletePost">
+		  	<b-icon style="color:black;" icon="x-square" font-scale="0.8"></b-icon>
+			</b-link>
+		 </div>
 		 <h5 class="mt-0">{{ data.user.name }}</h5>
 		 <small class="text-muted">{{ timeAgo == "0 seconds ago" ? "just now" : timeAgo }}</small>
 		 <p>
@@ -63,6 +67,16 @@
       updatePost() {
 				console.log('Estoy en el post');
       },
+			deletePost(){
+				const data = new FormData();
+				data.append('post_id', this.data._id);
+
+				this.$http.post("/deletePost", data).then((response)=>{
+						if(response.data == 1){
+							this.$root.$emit('deletePost',this.data._id);
+						}
+				});
+			},
     },
 		computed: {
 			comments(){

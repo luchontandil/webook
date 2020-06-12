@@ -2177,6 +2177,12 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     });
+    this.$root.$on('deletePost', function (data) {
+      _this.posts = _this.posts.filter(function (item) {
+        return item._id !== data;
+      });
+      _this.reload = !_this.reload;
+    });
   }
 });
 
@@ -2610,6 +2616,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     data: {},
@@ -2622,6 +2632,17 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     updatePost: function updatePost() {
       console.log('Estoy en el post');
+    },
+    deletePost: function deletePost() {
+      var _this = this;
+
+      var data = new FormData();
+      data.append('post_id', this.data._id);
+      this.$http.post("/deletePost", data).then(function (response) {
+        if (response.data == 1) {
+          _this.$root.$emit('deletePost', _this.data._id);
+        }
+      });
     }
   },
   computed: {
@@ -2643,17 +2664,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     this.$root.$on('actualizarDatosdelquecomenta', function (data) {
       // this.reload = !this.reload;
       console.log('PFP en el POST ' + data.pfp);
-      _this.datos = data; // this.$root.$emit('actualizarlascosasdelPOST', data);
+      _this2.datos = data; // this.$root.$emit('actualizarlascosasdelPOST', data);
     });
     this.$root.$on('appendComment', function (data) {
-      if (data[0].post_id == _this.data._id) {
+      if (data[0].post_id == _this2.data._id) {
         // console.log(data);
-        _this.data.comments.push(data[0]);
+        _this2.data.comments.push(data[0]);
       }
     });
   }
@@ -2926,6 +2947,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -65487,6 +65511,30 @@ var render = function() {
             },
             [
               _vm._v(" "),
+              _vm.data.user._id == _vm.datos._id
+                ? _c(
+                    "div",
+                    { staticClass: "h2 mb-0" },
+                    [
+                      _c(
+                        "b-link",
+                        {
+                          staticStyle: { float: "right" },
+                          on: { click: _vm.deletePost }
+                        },
+                        [
+                          _c("b-icon", {
+                            staticStyle: { color: "black" },
+                            attrs: { icon: "x-square", "font-scale": "0.8" }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c("h5", { staticClass: "mt-0" }, [
                 _vm._v(_vm._s(_vm.data.user.name))
               ]),
@@ -65852,7 +65900,11 @@ var render = function() {
             }
           ]
         },
-        [_vm._v("Preferences")]
+        [
+          _vm._v("\n    Preferences\n    "),
+          _c("b-icon", { attrs: { icon: "wrench" } })
+        ],
+        1
       ),
       _vm._v(" "),
       _c(
@@ -78121,6 +78173,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.prototype.$http = window.axios;
 
 
 
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_2__["IconsPlugin"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('feed-component', __webpack_require__(/*! ./components/FeedComponent.vue */ "./resources/js/components/FeedComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('sidebar-component', __webpack_require__(/*! ./components/SidebarComponent.vue */ "./resources/js/components/SidebarComponent.vue")["default"]);

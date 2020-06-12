@@ -1,6 +1,9 @@
 <template>
   <div>
-    <b-button v-b-toggle.sidebar-backdrop>Preferences</b-button>
+    <b-button v-b-toggle.sidebar-backdrop>
+      Preferences
+      <b-icon icon="wrench"></b-icon>
+    </b-button>
 
     <b-sidebar
       id="sidebar-backdrop"

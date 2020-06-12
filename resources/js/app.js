@@ -9,7 +9,9 @@ Vue.prototype.$http = window.axios;
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 import "./components/CommentFormCss.css"
+import { IconsPlugin } from 'bootstrap-vue'
 
+Vue.use(IconsPlugin)
 Vue.use(BootstrapVue)
 
 Vue.component('feed-component', require('./components/FeedComponent.vue').default);

@@ -61,6 +61,16 @@ class UserController extends Controller
       return response()->json($post);
     }
 
+    public function deletePost(Request $request){
+      $res = 0;
+      $user = User::find(Auth::user()->id);
+      if($user){
+        $post_id = $request->post_id;
+        $res = Post::where('_id',$post_id)->delete();
+      }
+      return response()->json($res);
+    }
+
     public function getPosts($username)
     {
       if( $username != Auth::user()->name){
