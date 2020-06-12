@@ -2323,11 +2323,6 @@ __webpack_require__.r(__webpack_exports__);
       followers: []
     };
   },
-  watch: {
-    followers: function followers() {
-      this.getFollowers();
-    }
-  },
   computed: {
     username: function username() {
       return this.name;
@@ -2354,23 +2349,26 @@ __webpack_require__.r(__webpack_exports__);
     forceRerender: function forceRerender() {
       this.forceRender++;
     },
-    getFollowers: function getFollowers() {},
+    reload: function reload() {
+      var _this = this;
+
+      if (this.onlyView == 1) {
+        axios.get("/getFollowers/".concat(this.user.name)).then(function (response) {
+          _this.followers = response.data;
+        });
+      } else {
+        axios.get("/getFollowers").then(function (response) {
+          _this.followers = response.data;
+        });
+      }
+    },
     updateFollowing: function updateFollowing() {
       this.$root.$emit('updateList');
+      this.reload();
     }
   },
   mounted: function mounted() {
-    var _this = this;
-
-    if (this.onlyView == 1) {
-      axios.get("/getFollowers/".concat(this.user.name)).then(function (response) {
-        _this.followers = response.data;
-      });
-    } else {
-      axios.get("/getFollowers").then(function (response) {
-        _this.followers = response.data;
-      });
-    }
+    this.reload();
   }
 });
 
@@ -65374,7 +65372,7 @@ var render = function() {
             id: "modal-1",
             title: _vm.followersTitle
           },
-          on: { hidden: _vm.updateFollowing }
+          on: { show: _vm.reload, hidden: _vm.updateFollowing }
         },
         _vm._l(_vm.followers, function(follower, i) {
           return _c(

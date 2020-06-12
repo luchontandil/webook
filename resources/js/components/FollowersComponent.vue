@@ -1,6 +1,6 @@
 <template>
 	<div >
-	  <b-modal centered hide-footer id="modal-1" :title="followersTitle" @hidden="updateFollowing">
+	  <b-modal centered hide-footer id="modal-1" :title="followersTitle" @show="reload" @hidden="updateFollowing">
 	    <!-- <p class="my-4">Hello from modal!</p> -->
 				<b-list-group class="my-2"
 					v-for="(follower,i) in followers"
@@ -45,11 +45,6 @@ export default {
 			followers: [],
 		}
 	},
-	watch: {
-    followers: function () {
-      this.getFollowers();
-    }
-  },
 	computed: {
 		username(){
 			return this.name
@@ -74,24 +69,25 @@ export default {
 		forceRerender() {
       this.forceRender++;
     },
-		getFollowers(){
-
+		reload(){
+			if(this.onlyView == 1){
+			axios.get(`/getFollowers/${this.user.name}`).then(response => {
+				 this.followers = response.data;
+			})
+			}
+			else{
+				axios.get(`/getFollowers`).then(response => {
+					 this.followers = response.data;
+				})
+			}
 		},
 		updateFollowing(){
 			this.$root.$emit('updateList');
+			this.reload();
 		}
 	},
 	mounted(){
-		if(this.onlyView == 1){
-		axios.get(`/getFollowers/${this.user.name}`).then(response => {
-			 this.followers = response.data;
-		})
-		}
-		else{
-			axios.get(`/getFollowers`).then(response => {
-				 this.followers = response.data;
-			})
-		}
+			this.reload();
 	}
 }
 </script>
