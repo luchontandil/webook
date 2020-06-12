@@ -2299,6 +2299,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     data: {}
@@ -2341,7 +2354,10 @@ __webpack_require__.r(__webpack_exports__);
     forceRerender: function forceRerender() {
       this.forceRender++;
     },
-    getFollowers: function getFollowers() {}
+    getFollowers: function getFollowers() {},
+    updateFollowing: function updateFollowing() {
+      this.$root.$emit('updateList');
+    }
   },
   mounted: function mounted() {
     var _this = this;
@@ -2443,6 +2459,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     data: {}
@@ -2479,18 +2509,35 @@ __webpack_require__.r(__webpack_exports__);
     forceRerender: function forceRerender() {
       this.forceRender++;
     },
-    getFollowers: function getFollowers() {}
+    getFollowers: function getFollowers() {},
+    updateList: function updateList() {
+      var _this = this;
+
+      if (this.onlyView == 1) {
+        axios.get("/getFollowing/".concat(this.user.name)).then(function (response) {
+          _this.followers = response.data;
+        });
+      } else {
+        axios.get("/getFollowing").then(function (response) {
+          _this.followers = response.data;
+        });
+      }
+    }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
+
+    this.$root.$on('updateList', function (data) {
+      _this2.updateList();
+    });
 
     if (this.onlyView == 1) {
       axios.get("/getFollowing/".concat(this.user.name)).then(function (response) {
-        _this.followers = response.data;
+        _this2.followers = response.data;
       });
     } else {
       axios.get("/getFollowing").then(function (response) {
-        _this.followers = response.data;
+        _this2.followers = response.data;
       });
     }
   }
@@ -65293,18 +65340,74 @@ var render = function() {
     "div",
     [
       _c(
+        "b-modal",
+        {
+          attrs: {
+            centered: "",
+            "hide-footer": "",
+            id: "modal-1",
+            title: _vm.followersTitle
+          },
+          on: { hidden: _vm.updateFollowing }
+        },
+        _vm._l(_vm.followers, function(follower, i) {
+          return _c(
+            "b-list-group",
+            { key: i, staticClass: "my-2" },
+            [_c("search-item-component", { attrs: { user: follower } })],
+            1
+          )
+        }),
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "b-card-body",
         {
           staticClass: "row",
           attrs: { "body-bg-variant": "light", title: _vm.followersTitle }
         },
         [
-          _c("div", { staticClass: "col-4 col-sm-4" }),
+          _c(
+            "div",
+            { staticClass: "col-4 col-sm-4" },
+            [
+              _c(
+                "b-link",
+                { staticStyle: { float: "right" } },
+                [
+                  _c(
+                    "b-button",
+                    {
+                      directives: [
+                        {
+                          name: "b-modal",
+                          rawName: "v-b-modal.modal-1",
+                          modifiers: { "modal-1": true }
+                        }
+                      ],
+                      attrs: { variant: "outline-info" }
+                    },
+                    [
+                      _c("b-icon", {
+                        staticStyle: { color: "black" },
+                        attrs: { icon: "people-fill", "font-scale": "1" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
           _vm._v(" "),
-          _vm._l(_vm.lastSixFollowers, function(follower) {
+          _vm._l(_vm.lastSixFollowers, function(follower, i) {
             return _c(
               "div",
               {
+                key: i,
                 staticClass: "col-4 col-sm-4",
                 staticStyle: {
                   "font-size": "1.2rem",
@@ -65413,18 +65516,74 @@ var render = function() {
     "div",
     [
       _c(
+        "b-modal",
+        {
+          attrs: {
+            centered: "",
+            "hide-footer": "",
+            id: "modal-2",
+            title: _vm.followersTitle
+          },
+          on: { hidden: _vm.updateList }
+        },
+        _vm._l(_vm.followers, function(follower, i) {
+          return _c(
+            "b-list-group",
+            { key: i, staticClass: "my-2" },
+            [_c("search-item-component", { attrs: { user: follower } })],
+            1
+          )
+        }),
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "b-card-body",
         {
           staticClass: "row",
           attrs: { "body-bg-variant": "light", title: _vm.followersTitle }
         },
         [
-          _c("div", { staticClass: "col-4 col-sm-4" }),
+          _c(
+            "div",
+            { staticClass: "col-4 col-sm-4" },
+            [
+              _c(
+                "b-link",
+                { staticStyle: { float: "right" } },
+                [
+                  _c(
+                    "b-button",
+                    {
+                      directives: [
+                        {
+                          name: "b-modal",
+                          rawName: "v-b-modal.modal-2",
+                          modifiers: { "modal-2": true }
+                        }
+                      ],
+                      attrs: { variant: "outline-info" }
+                    },
+                    [
+                      _c("b-icon", {
+                        staticStyle: { color: "black" },
+                        attrs: { icon: "people-fill", "font-scale": "1" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
           _vm._v(" "),
-          _vm._l(_vm.lastSixFollowers, function(follower) {
+          _vm._l(_vm.lastSixFollowers, function(follower, i) {
             return _c(
               "div",
               {
+                key: i,
                 staticClass: "col-4 col-sm-4",
                 staticStyle: {
                   "font-size": "1.2rem",
@@ -65840,7 +65999,7 @@ var render = function() {
           variant: "info",
           src: _vm.pfpPath,
           href: _vm.url,
-          size: "6rem"
+          size: "3rem"
         }
       }),
       _vm._v(" "),
