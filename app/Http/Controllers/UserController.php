@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
+use App\Comment;
 use Auth;
 
 class UserController extends Controller
@@ -15,8 +16,30 @@ class UserController extends Controller
     public function user(){
       return Auth::user();
     }
-    public function post(Request $request)
-    {
+
+    public function comment(Request $request){
+      $comment = new Comment([
+        'content' => $request->content,
+        'likedBy' => $request->likedBy,
+        'user_id' => User::find(Auth::user()->id)->id,
+        'post_id' => $request->post_id,
+      ]);
+
+      $comment->save();
+      $comment->refresh();
+      $commentid = $comment->id;
+
+      $user = User::find(Auth::user()->id);
+      $user->comments()->save($comment);
+      // $user->save();
+      $user->refresh();
+
+      $comment = Comment::where('_id',$commentid)->with('post')->get();
+
+      return response()->json($comment);
+    }
+
+    public function post(Request $request){
       $post = new Post([
         'content' => $request->content,
         'likedBy' => $request->likedBy,
@@ -37,11 +60,13 @@ class UserController extends Controller
 
       return response()->json($post);
     }
+
     public function getPosts($username)
     {
       if( $username != Auth::user()->name){
         $user = User::where('name', $username)->first();
         $posts = Post::with('user')
+        ->with('comments')
         ->where('user_id',$user->id)
         ->orderBy('created_at', 'desc')
         ->get();
@@ -50,6 +75,7 @@ class UserController extends Controller
         $user = User::find(Auth::user()->id);
         // $posts = Post::with('user')->where('user_id',$user->_id)->get();
         $posts = Post::with('user')
+        ->with('comments')
         ->where('user_id',$user->_id)
         ->orWhereIn('user_id', $user->followList)
         ->orderBy('created_at', 'desc')

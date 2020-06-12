@@ -25,7 +25,7 @@ class User extends \Jenssegers\Mongodb\Eloquent\Model implements
         'pfp' => '/images/default.png',
         'followList' => array(),
         'followers' => array(),
-        'posts' =>array(),
+        'posts' => array(),
     ];
     protected $fillable = [
         'id','name', 'email', 'password', 'pfp', 'bio'
@@ -42,5 +42,8 @@ class User extends \Jenssegers\Mongodb\Eloquent\Model implements
 
     public function posts() {
      return $this->hasMany('App\Post');
+    }
+    public function comments() {
+     return $this->hasMany('App\Comment');
     }
 }

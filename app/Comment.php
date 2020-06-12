@@ -9,25 +9,24 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class Post extends \Jenssegers\Mongodb\Eloquent\Model{ use Notifiable;
+class Comment extends \Jenssegers\Mongodb\Eloquent\Model{ use Notifiable;
 
     protected $attributes = [
-     'likedBy' => array(),
-     'comments' => array()
+     'likedBy' => array()
     ];
     protected $fillable = [
-        'id', 'content'
+      'id', 'content', 'user_id', 'post_id'
     ];
 
-    protected $hidden = [
-      'user_id'
+    protected $with = [
+      'user'
     ];
 
+    public function post(){
+     return $this->belongsTo("App\Post");
+    }
     public function user(){
      return $this->belongsTo("App\User");
-    }
-    public function comments() {
-     return $this->hasMany('App\Comment');
     }
 
 }

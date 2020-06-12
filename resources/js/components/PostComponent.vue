@@ -18,7 +18,9 @@
 		 <h5 class="mt-0">{{ data.user.name }}</h5>
 		 <small class="text-muted">{{ timeAgo == "0 seconds ago" ? "just now" : timeAgo }}</small>
 		 <p>
+			 <div style="word-break: break-all;">
 				{{ data.content }}
+			</div>
 				<b-card-img
 					v-if="data.image"
 					:src="data.image"
@@ -26,6 +28,16 @@
 				>
 				</b-card-img>
 		 </p>
+		 <ul class="list-unstyled"
+		 	:v-bind="comments"
+			v-for="(comment,i) in comments"
+			:key="i"
+		 >
+		 <b-list-group-item>
+			 <comment :commentData="comment"></comment>
+		 </b-list-group-item>
+	 	</ul>
+
 	</b-media>
 	<coment-form :user="datos" :postData="data" ></coment-form>
 	</b-card-body>
@@ -39,7 +51,7 @@
   export default {
     props:{
   		data: {},
-			datos: {}
+			datos: {},
   	},
     name: 'Counter',
     data() {
@@ -53,6 +65,9 @@
       },
     },
 		computed: {
+			comments(){
+				return this.data.comments;
+			},
 			url(){
 				return `${window.location.origin}/profile/${this.data.user.name}`;
 			},
@@ -78,6 +93,12 @@
 					 this.datos = data;
 					 // this.$root.$emit('actualizarlascosasdelPOST', data);
 			});
+			this.$root.$on('appendComment', data => {
+				if(data[0].post_id == this.data._id ){
+					// console.log(data);
+					this.data.comments.push(data[0]);
+				}
+			})
 		}
   }
 </script>

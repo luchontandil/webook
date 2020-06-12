@@ -65,29 +65,28 @@ export default {
 	methods: {
 		onSubmit(evt) {
 			evt.preventDefault()
-			console.log(this.user);
-			console.log(this.coment.content);
-			console.log(this.postData._id);
+			// console.log(this.user);
+			// console.log(this.coment.content);
+			// console.log(this.postData._id);
 
-			// const data = new FormData();
-			// data.append('content', this.coment.content);
-			// data.append('likes',this.coment.likedBy);
-			//
-			// this.$http.post("/post", data).then((response)=>{
-			// 	this.coment.content = '';
-			// 	setTimeout(()=>{this.show = false},100);
-			// 	this.$emit('update', response.data);
-			// });
+			const data = new FormData();
+			data.append('content', this.coment.content);
+			data.append('likedBy', this.coment.likedBy);
+			data.append('user_id', this.user.id);
+			data.append('post_id', this.postData._id);
+
+			this.$http.post("/comment", data).then((response)=>{
+				this.coment.content = '';
+				this.$root.$emit('appendComment', response.data);
+				// console.log(response.data);
+			})
 		},
 	},
 	mounted(){
 		this.$root.$on('actualizarDatosdelquecomenta', data => {
 		 // this.reload = !this.reload;
-		 console.log('Esta es la que tenia el coment form'+this.user.pfp);
 		 this.user = data;
 		 this.updatear = !this.updatear;
-		 console.log('PFP que le llega al coment form'+this.user.pfp);
-		 console.log('estoy dentro del post form xD 2')
 		 // this.$root.$emit('actualizarlascosasdelPOST', data);
 		});
 	}
