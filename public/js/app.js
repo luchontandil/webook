@@ -2901,6 +2901,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'search-item-component',
   props: {
@@ -2909,6 +2911,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      isShowing: true,
       forceRender: 0,
       pfpPath: null,
       variant: 'info',
@@ -2928,6 +2931,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var data = new FormData();
       data.append('userid', this.user._id);
+      this.isShowing = true;
       this.$http.post("/follow", data).then(function (response) {
         console.log(response.data);
         _this.isFollow = response.data;
@@ -2937,6 +2941,8 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           _this.variant = 'danger';
         }
+
+        _this.isShowing = false;
       });
     }
   },
@@ -2948,7 +2954,7 @@ __webpack_require__.r(__webpack_exports__);
       return "".concat(window.location.origin, "/profile/").concat(this.user.name);
     }
   },
-  mounted: function mounted() {
+  created: function created() {
     var _this2 = this;
 
     var getUrl = window.location;
@@ -2960,6 +2966,8 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         _this2.variant = 'info';
       }
+
+      _this2.isShowing = false;
     });
     this.load();
   }
@@ -3079,6 +3087,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     userdata: Object
@@ -3086,9 +3098,12 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       show: false,
+      overlayBio: false,
       pfpPath: null,
       pfpfile: null,
       variant: 'dark',
+      variantUploadImage: 'info',
+      variantChangeBio: 'info',
       variants: ['transparent', 'white', 'light', 'dark', 'primary', 'secondary', 'success', 'danger', 'warning', 'info']
     };
   },
@@ -3096,6 +3111,7 @@ __webpack_require__.r(__webpack_exports__);
     saveBio: function saveBio() {
       var _this = this;
 
+      this.overlayBio = true;
       var text = document.querySelector("#textarea").value;
       this.userdata.bio = text;
       var data = new FormData();
@@ -3103,6 +3119,8 @@ __webpack_require__.r(__webpack_exports__);
       data.append('userid', this.userdata._id);
       this.$http.post("/updateBio", data).then(function (response) {
         _this.userdata.bio = response.data;
+        _this.variantChangeBio = 'success';
+        _this.overlayBio = false;
       });
     },
     changepfp: function changepfp() {
@@ -3110,6 +3128,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     update: function update() {
       this.$root.$emit('update', this.userdata);
+    },
+    reset: function reset() {
+      this.variantUploadImage = 'info';
+      this.variantChangeBio = 'info';
     },
     uploadpfp: function uploadpfp() {
       var _this2 = this;
@@ -3133,9 +3155,13 @@ __webpack_require__.r(__webpack_exports__);
           _this2.userdata.pfp = response.data;
         }).then(function () {
           _this2.show = false;
+          _this2.variantUploadImage = 'success';
         });
       }
     }
+  },
+  created: function created() {
+    this.variantUploadImage = 'info';
   }
 });
 
@@ -65989,35 +66015,44 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "b-list-group-item",
-    { staticClass: "d-flex align-items-center" },
+    "b-overlay",
+    { attrs: { show: _vm.isShowing, rounded: "sm" } },
     [
-      _c("b-avatar", {
-        key: _vm.forceRender,
-        staticClass: "mr-3",
-        attrs: {
-          variant: "info",
-          src: _vm.pfpPath,
-          href: _vm.url,
-          size: "3rem"
-        }
-      }),
-      _vm._v(" "),
-      _c("h4", { staticClass: "mr-auto" }, [_vm._v(_vm._s(_vm.user.name))]),
-      _vm._v(" "),
-      _c("span", { staticClass: "mr-auto" }, [_vm._v(_vm._s(_vm.user.bio))]),
-      _vm._v(" "),
       _c(
-        "b-button",
-        {
-          attrs: { variant: _vm.variant },
-          on: {
-            click: function($event) {
-              return _vm.follow()
+        "b-list-group-item",
+        { staticClass: "d-flex align-items-center" },
+        [
+          _c("b-avatar", {
+            key: _vm.forceRender,
+            staticClass: "mr-3",
+            attrs: {
+              variant: "info",
+              src: _vm.pfpPath,
+              href: _vm.url,
+              size: "3rem"
             }
-          }
-        },
-        [_vm._v("\n\t\t" + _vm._s(_vm.status) + "\n \t")]
+          }),
+          _vm._v(" "),
+          _c("h4", { staticClass: "mr-auto" }, [_vm._v(_vm._s(_vm.user.name))]),
+          _vm._v(" "),
+          _c("span", { staticClass: "mr-auto" }, [
+            _vm._v(_vm._s(_vm.user.bio))
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-button",
+            {
+              attrs: { variant: _vm.variant },
+              on: {
+                click: function($event) {
+                  return _vm.follow()
+                }
+              }
+            },
+            [_vm._v("\n\t\t\t" + _vm._s(_vm.status) + "\n\t \t")]
+          )
+        ],
+        1
       )
     ],
     1
@@ -66137,7 +66172,7 @@ var render = function() {
             backdrop: "",
             shadow: ""
           },
-          on: { hidden: _vm.update }
+          on: { hidden: _vm.update, shown: _vm.reset }
         },
         [
           _c(
@@ -66147,16 +66182,16 @@ var render = function() {
               _c("h5", { staticClass: "mt-0" }, [_vm._v("Profile Picture")]),
               _vm._v(" "),
               _c(
-                "b-overlay",
-                { attrs: { show: _vm.show, rounded: "sm" } },
+                "b-button",
+                {
+                  attrs: { variant: this.variantUploadImage },
+                  on: { click: _vm.changepfp }
+                },
                 [
                   _c(
-                    "b-button",
-                    {
-                      attrs: { variant: "info" },
-                      on: { click: _vm.changepfp }
-                    },
-                    [_vm._v("\n        Upload\n        ")]
+                    "b-overlay",
+                    { attrs: { show: _vm.show, rounded: "sm" } },
+                    [_vm._v("\n            Upload\n          ")]
                   )
                 ],
                 1
@@ -66183,41 +66218,50 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "div",
-                { staticClass: "mt-3" },
+                "b-overlay",
+                { attrs: { show: _vm.overlayBio, rounded: "sm" } },
                 [
-                  _c("h5", { staticClass: "mt-0" }, [
-                    _vm._v("Edit your biography")
-                  ]),
-                  _vm._v(" "),
-                  _c("b-form-textarea", {
-                    staticStyle: {
-                      "margin-bottom": "10px",
-                      "margin-right": "10px",
-                      width: "90%"
-                    },
-                    attrs: {
-                      id: "textarea",
-                      placeholder: "Enter something...",
-                      rows: "3",
-                      "no-resize": ""
-                    },
-                    model: {
-                      value: _vm.userdata.bio,
-                      callback: function($$v) {
-                        _vm.$set(_vm.userdata, "bio", $$v)
-                      },
-                      expression: "userdata.bio"
-                    }
-                  }),
-                  _vm._v(" "),
                   _c(
-                    "b-button",
-                    { attrs: { variant: "info" }, on: { click: _vm.saveBio } },
-                    [_vm._v("Save Biography\n       ")]
+                    "div",
+                    { staticClass: "mt-3" },
+                    [
+                      _c("h5", { staticClass: "mt-0" }, [
+                        _vm._v("Edit your biography")
+                      ]),
+                      _vm._v(" "),
+                      _c("b-form-textarea", {
+                        staticStyle: {
+                          "margin-bottom": "10px",
+                          "margin-right": "10px",
+                          width: "90%"
+                        },
+                        attrs: {
+                          id: "textarea",
+                          placeholder: "Enter something...",
+                          rows: "3",
+                          "no-resize": ""
+                        },
+                        model: {
+                          value: _vm.userdata.bio,
+                          callback: function($$v) {
+                            _vm.$set(_vm.userdata, "bio", $$v)
+                          },
+                          expression: "userdata.bio"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "b-button",
+                        {
+                          attrs: { variant: this.variantChangeBio },
+                          on: { click: _vm.saveBio }
+                        },
+                        [_vm._v("Save Biography\n         ")]
+                      )
+                    ],
+                    1
                   )
-                ],
-                1
+                ]
               )
             ],
             1

@@ -1,13 +1,15 @@
 <template>
-	<b-list-group-item class="d-flex align-items-center">
-		<b-avatar :key="forceRender" variant="info" :src="pfpPath" :href="url" class="mr-3" size="3rem"></b-avatar>
-		<h4 class="mr-auto">{{ user.name }}</h4>
+	<b-overlay :show="isShowing" rounded="sm">
+		<b-list-group-item class="d-flex align-items-center">
+			<b-avatar :key="forceRender" variant="info" :src="pfpPath" :href="url" class="mr-3" size="3rem"></b-avatar>
+			<h4 class="mr-auto">{{ user.name }}</h4>
 
-		<span class="mr-auto">{{ user.bio }}</span>
-		<b-button :variant="variant" @click="follow()">
-			{{ status }}
-	 	</b-button>
-	</b-list-group-item>
+			<span class="mr-auto">{{ user.bio }}</span>
+			<b-button :variant="variant" @click="follow()">
+				{{ status }}
+		 	</b-button>
+		</b-list-group-item>
+	</b-overlay>
 </template>
 
 <script>
@@ -30,6 +32,7 @@ export default {
 	},
 	data() {
 		return {
+			isShowing: true,
 			forceRender : 0,
 			pfpPath: null,
 			variant: 'info',
@@ -47,7 +50,7 @@ export default {
 		follow(){
 			const data = new FormData();
 			data.append('userid', this.user._id);
-
+			this.isShowing = true;
 			this.$http.post("/follow", data).then((response)=>{
 					console.log(response.data);
 					this.isFollow = response.data;
@@ -57,6 +60,7 @@ export default {
 					else{
 						this.variant = 'danger'
 	 			 	}
+			this.isShowing = false;
 			});
 		}
 	},
@@ -68,7 +72,7 @@ export default {
 			return `${window.location.origin}/profile/${this.user.name}`;
 		},
 	},
-	mounted(){
+	created(){
 		var getUrl = window.location;
 		var baseUrl = getUrl .protocol + "//" + getUrl.host + "/";
 		axios.get(baseUrl+'/getID').then(response => {
@@ -79,6 +83,7 @@ export default {
 			 else{
 				  this.variant = 'info'
 			 }
+			 this.isShowing = false;
 		})
 		this.load();
 	}
