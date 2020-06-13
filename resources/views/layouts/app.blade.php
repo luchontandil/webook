@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ URL::asset('/images/favicon.ico') }}" type="image/x-icon"/>
 </head>
 <body>
     <div id="app">
@@ -25,7 +26,9 @@
             <div class="container col-md-12">
               <div class="col-md-2">
                 <a class="navbar-brand" href="{{ url('/home') }}">
+                  <img src="{{ URL::asset('/images/favicon.ico') }}" width="30px" height="30px"/>
                     webook
+                    <!-- #5AF color del icon -->
                 </a>
               </div>
                 @guest
