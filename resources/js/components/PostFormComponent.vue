@@ -106,7 +106,7 @@ export default {
 				data.append('content', this.post.content);
 				data.append('likes',this.post.likedBy);
 				data.append('imagePath',this.pfpPath);
-				data.append('link', this.link ? this.link.replace('/watch?v=', '/embed/'): this.link);
+				data.append('link', this.link ? `//www.youtube.com/embed/${this.getId(this.link)}`: this.link);
 
 				this.$http.post("/post", data).then((response)=>{
 					this.post.content = '';
@@ -120,6 +120,14 @@ export default {
 			else{
 				this.autenticatePost = false;
 			}
+		},
+		getId(url) {
+	    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+	    const match = url.match(regExp);
+
+	    return (match && match[2].length === 11)
+	      ? match[2]
+	      : null;
 		},
 		uploadPhoto(){
 				document.getElementById("fileUploadPOST").click();

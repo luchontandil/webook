@@ -35,6 +35,7 @@
 		 </div>
 		 <div
 		  v-if="data.link!= 'null'"
+			:style="hasLink"
 		 >
 		  <b-embed
 		    type="iframe"
@@ -94,6 +95,9 @@
 		computed: {
 			comments(){
 				return this.data.comments;
+			},
+			hasLink(){
+				return (this.data.link == null || this.data.link == undefined)? 'height:0px;':'height:auto;'
 			},
 			url(){
 				return `${window.location.origin}/profile/${this.data.user.name}`;

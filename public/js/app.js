@@ -2696,6 +2696,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     loggedUser: {},
@@ -2725,6 +2726,9 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     comments: function comments() {
       return this.data.comments;
+    },
+    hasLink: function hasLink() {
+      return this.data.link == null || this.data.link == undefined ? 'height:0px;' : 'height:auto;';
     },
     url: function url() {
       return "".concat(window.location.origin, "/profile/").concat(this.data.user.name);
@@ -2887,7 +2891,7 @@ __webpack_require__.r(__webpack_exports__);
         data.append('content', this.post.content);
         data.append('likes', this.post.likedBy);
         data.append('imagePath', this.pfpPath);
-        data.append('link', this.link ? this.link.replace('/watch?v=', '/embed/') : this.link);
+        data.append('link', this.link ? "//www.youtube.com/embed/".concat(this.getId(this.link)) : this.link);
         this.$http.post("/post", data).then(function (response) {
           _this.post.content = '';
           _this.pfpPath = null;
@@ -2902,6 +2906,11 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.autenticatePost = false;
       }
+    },
+    getId: function getId(url) {
+      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      var match = url.match(regExp);
+      return match && match[2].length === 11 ? match[2] : null;
     },
     uploadPhoto: function uploadPhoto() {
       document.getElementById("fileUploadPOST").click();
@@ -65924,6 +65933,7 @@ var render = function() {
           _vm.data.link != "null"
             ? _c(
                 "div",
+                { style: _vm.hasLink },
                 [
                   _c("b-embed", {
                     attrs: {
