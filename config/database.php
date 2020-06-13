@@ -10,7 +10,7 @@ return [
 
         'mongodb' => [
           'driver' => 'mongodb',
-          'dns' => 'mongodb://passa:passa543@cluster0-shard-00-00-e1uju.mongodb.net:27017,cluster0-shard-00-01-e1uju.mongodb.net:27017,cluster0-shard-00-02-e1uju.mongodb.net:27017/<dbname>?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority',
+          'dsn' => 'mongodb://passa:passa543@cluster0-shard-00-00-e1uju.mongodb.net:27017,cluster0-shard-00-01-e1uju.mongodb.net:27017,cluster0-shard-00-02-e1uju.mongodb.net:27017/<dbname>?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority',
           'host' => env('DB_HOST', 'localhost'),
           'port' => env('DB_PORT', 27017),
           'database' => env('DB_DATABASE'),
