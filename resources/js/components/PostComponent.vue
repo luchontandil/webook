@@ -28,13 +28,22 @@
 		 </p>
 	</b-media>
 		 <div
-		 v-if="data.imagePath"
-		 :src="data.imagePath"
-		 alt="Image"
+		 v-if="data.imagePath != 'null'"
 		 style="margin-bottom:10px;"
 		 >
 			 <b-img :src="imagePath" fluid alt="Responsive image"></b-img>
 		 </div>
+		 <div
+		  v-if="data.link!= 'null'"
+		 >
+		  <b-embed
+		    type="iframe"
+		    aspect="16by9"
+		    :src="data.link"
+		    allowfullscreen
+		  ></b-embed>
+		</div>
+		<br>
 		 <ul class="list-unstyled"
 		 	:v-bind="comments"
 			v-for="(comment,i) in comments"

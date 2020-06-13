@@ -14,8 +14,16 @@
 					:state="autenticatePost"
 					>
 					</b-form-textarea>
+					<b-form-textarea
+					id="link"
+					placeholder="Paste your link here..."
+					rows="1"
+					v-model="link"
+					no-resize
+					:style="isHidden"
+					>
+					</b-form-textarea>
 				</div>
-				<br>
 				<div v-if="this.pfpPath">
 					<b-img :src="this.pfpPath" fluid alt="Responsive image"></b-img>
 				</div>
@@ -28,7 +36,7 @@
 				<b-button
 					variant="outline-primary"
 					@click="uploadPhoto"
-					style="float:right; margin-top:10px;"
+					style="float:right; margin-top:10px;margin-left:10px;"
 				>
 					<!-- <b-overlay :show="show" rounded="sm"> -->
 						Upload image
@@ -43,6 +51,13 @@
 						accept="image/*"
 						></b-form-file>
 				</div>
+				<b-button
+					variant="outline-primary"
+					@click="addLink"
+					style="float:right; margin-top:10px; "
+				>
+					Youtube link
+				</b-button>
 
 
 			</b-form-group>
@@ -62,30 +77,42 @@ export default {
 	data() {
 		return {
 			post: {
-				content: '',
+				content: null,
 			  autor: this.user,
 				likedBy: []
 			},
 			pfpPath: null,
 			pfpfile: null,
 			show: false,
-			autenticatePost: null
+			autenticatePost: null,
+			link: null,
+			showLinkForm: false
 		}
 	},
 	methods: {
+		addLink(){
+			this.showLinkForm = !this.showLinkForm;
+			this.link = '';
+		},
 		onSubmit(evt) {
-			evt.preventDefault()
-			if(this.pfpPath || (this.post.content.lenght >0)){
+			evt.preventDefault();
+			console.log(this.post.content)
+			console.log(this.pfpPath)
+			console.log(this.link)
+			if((this.pfpPath) || (this.post.content) || (this.link)){
+				console.log('ENTRE EN EL ENVIAR')
 				this.show = true;
 				const data = new FormData();
 				data.append('content', this.post.content);
 				data.append('likes',this.post.likedBy);
 				data.append('imagePath',this.pfpPath);
+				data.append('link', this.link ? this.link.replace('/watch?v=', '/embed/'): this.link);
 
 				this.$http.post("/post", data).then((response)=>{
 					this.post.content = '';
 					this.pfpPath = null;
 					this.autenticatePost = null;
+					this.link = '';
 					setTimeout(()=>{this.show = false},100);
 					this.$emit('update', response.data);
 				});
@@ -119,10 +146,10 @@ export default {
 			}
 		},
 	},
-	// computed: {
-	// 	autenticatePost(){
-	// 		return (this.imagePath || (this.post.content.lenght >0));
-	// 	}
-	// }
+	computed: {
+		isHidden(){
+			return `visibility:${this.showLinkForm ? 'visible; height:auto;': 'hidden; height:0px;'};`;
+		}
+	}
 }
 </script>

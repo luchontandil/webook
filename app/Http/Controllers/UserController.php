@@ -45,6 +45,7 @@ class UserController extends Controller
         'likedBy' => $request->likedBy,
         'user_id' => User::find(Auth::user()->id),
         'imagePath' => $request->imagePath,
+        'link' => $request->link
       ]);
 
       $post->save();

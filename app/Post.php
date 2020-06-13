@@ -16,7 +16,7 @@ class Post extends \Jenssegers\Mongodb\Eloquent\Model{ use Notifiable;
      'comments' => array()
     ];
     protected $fillable = [
-        'id', 'content', 'imagePath'
+        'id', 'content', 'imagePath', 'link'
     ];
 
     protected $hidden = [

@@ -2687,6 +2687,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     loggedUser: {},
@@ -2824,6 +2833,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     user: {}
@@ -2831,32 +2855,44 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       post: {
-        content: '',
+        content: null,
         autor: this.user,
         likedBy: []
       },
       pfpPath: null,
       pfpfile: null,
       show: false,
-      autenticatePost: null
+      autenticatePost: null,
+      link: null,
+      showLinkForm: false
     };
   },
   methods: {
+    addLink: function addLink() {
+      this.showLinkForm = !this.showLinkForm;
+      this.link = '';
+    },
     onSubmit: function onSubmit(evt) {
       var _this = this;
 
       evt.preventDefault();
+      console.log(this.post.content);
+      console.log(this.pfpPath);
+      console.log(this.link);
 
-      if (this.pfpPath || this.post.content.lenght > 0) {
+      if (this.pfpPath || this.post.content || this.link) {
+        console.log('ENTRE EN EL ENVIAR');
         this.show = true;
         var data = new FormData();
         data.append('content', this.post.content);
         data.append('likes', this.post.likedBy);
         data.append('imagePath', this.pfpPath);
+        data.append('link', this.link ? this.link.replace('/watch?v=', '/embed/') : this.link);
         this.$http.post("/post", data).then(function (response) {
           _this.post.content = '';
           _this.pfpPath = null;
           _this.autenticatePost = null;
+          _this.link = '';
           setTimeout(function () {
             _this.show = false;
           }, 100);
@@ -2894,12 +2930,12 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     }
-  } // computed: {
-  // 	autenticatePost(){
-  // 		return (this.imagePath || (this.post.content.lenght >0));
-  // 	}
-  // }
-
+  },
+  computed: {
+    isHidden: function isHidden() {
+      return "visibility:".concat(this.showLinkForm ? 'visible; height:auto;' : 'hidden; height:0px;', ";");
+    }
+  }
 });
 
 /***/ }),
@@ -65868,13 +65904,10 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _vm.data.imagePath
+          _vm.data.imagePath != "null"
             ? _c(
                 "div",
-                {
-                  staticStyle: { "margin-bottom": "10px" },
-                  attrs: { src: _vm.data.imagePath, alt: "Image" }
-                },
+                { staticStyle: { "margin-bottom": "10px" } },
                 [
                   _c("b-img", {
                     attrs: {
@@ -65887,6 +65920,25 @@ var render = function() {
                 1
               )
             : _vm._e(),
+          _vm._v(" "),
+          _vm.data.link != "null"
+            ? _c(
+                "div",
+                [
+                  _c("b-embed", {
+                    attrs: {
+                      type: "iframe",
+                      aspect: "16by9",
+                      src: _vm.data.link,
+                      allowfullscreen: ""
+                    }
+                  })
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("br"),
           _vm._v(" "),
           _vm._l(_vm.comments, function(comment, i) {
             return _c(
@@ -65989,12 +66041,27 @@ var render = function() {
                               },
                               expression: "post.content"
                             }
+                          }),
+                          _vm._v(" "),
+                          _c("b-form-textarea", {
+                            style: _vm.isHidden,
+                            attrs: {
+                              id: "link",
+                              placeholder: "Paste your link here...",
+                              rows: "1",
+                              "no-resize": ""
+                            },
+                            model: {
+                              value: _vm.link,
+                              callback: function($$v) {
+                                _vm.link = $$v
+                              },
+                              expression: "link"
+                            }
                           })
                         ],
                         1
                       ),
-                      _vm._v(" "),
-                      _c("br"),
                       _vm._v(" "),
                       this.pfpPath
                         ? _c(
@@ -66028,7 +66095,11 @@ var render = function() {
                       _c(
                         "b-button",
                         {
-                          staticStyle: { float: "right", "margin-top": "10px" },
+                          staticStyle: {
+                            float: "right",
+                            "margin-top": "10px",
+                            "margin-left": "10px"
+                          },
                           attrs: { variant: "outline-primary" },
                           on: { click: _vm.uploadPhoto }
                         },
@@ -66055,6 +66126,16 @@ var render = function() {
                           })
                         ],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-button",
+                        {
+                          staticStyle: { float: "right", "margin-top": "10px" },
+                          attrs: { variant: "outline-primary" },
+                          on: { click: _vm.addLink }
+                        },
+                        [_vm._v("\r\n\t\t\t\t\tYoutube link\r\n\t\t\t\t")]
                       )
                     ],
                     1
