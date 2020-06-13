@@ -58,9 +58,6 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ],
-        "compile": [
-      "php composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction"
-    ]
+        ]
     }
 }
