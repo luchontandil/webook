@@ -2684,6 +2684,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     loggedUser: {},
@@ -2719,6 +2722,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     pfp: function pfp() {
       return this.data.onlyView != 1 ? '../' + this.data.user.pfp : '../../' + this.data.user.pfp;
+    },
+    imagePath: function imagePath() {
+      return this.data.onlyView != 1 ? '../' + this.data.imagePath : '../../' + this.data.imagePath;
     },
     timeAgo: function timeAgo() {
       var now = +new Date();
@@ -2791,6 +2797,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     user: {}
@@ -2802,29 +2835,71 @@ __webpack_require__.r(__webpack_exports__);
         autor: this.user,
         likedBy: []
       },
-      show: false
+      pfpPath: null,
+      pfpfile: null,
+      show: false,
+      autenticatePost: null
     };
   },
   methods: {
     onSubmit: function onSubmit(evt) {
       var _this = this;
 
-      this.show = true;
-      evt.preventDefault(); // alert(JSON.stringify(this.post))
+      evt.preventDefault();
 
-      var data = new FormData();
-      data.append('content', this.post.content);
-      data.append('likes', this.post.likedBy);
-      this.$http.post("/post", data).then(function (response) {
-        _this.post.content = '';
-        setTimeout(function () {
-          _this.show = false;
-        }, 100);
+      if (this.pfpPath || this.post.content.lenght > 0) {
+        this.show = true;
+        var data = new FormData();
+        data.append('content', this.post.content);
+        data.append('likes', this.post.likedBy);
+        data.append('imagePath', this.pfpPath);
+        this.$http.post("/post", data).then(function (response) {
+          _this.post.content = '';
+          _this.pfpPath = null;
+          _this.autenticatePost = null;
+          setTimeout(function () {
+            _this.show = false;
+          }, 100);
 
-        _this.$emit('update', response.data);
-      });
+          _this.$emit('update', response.data);
+        });
+      } else {
+        this.autenticatePost = false;
+      }
+    },
+    uploadPhoto: function uploadPhoto() {
+      document.getElementById("fileUploadPOST").click();
+    },
+    uploadimage: function uploadimage() {
+      var _this2 = this;
+
+      if (this.pfpfile) {
+        var fullPath = document.getElementById("fileUploadPOST").value;
+        var startIndex = fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/');
+        var filename = fullPath.substring(startIndex);
+
+        if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+          filename = filename.substring(1);
+        }
+
+        var data = new FormData();
+        data.append('ext', filename.split('.').pop());
+        data.append('photo', this.pfpfile);
+        this.show = true;
+        this.$http.post("/uploadImage", data).then(function (response) {
+          _this2.pfpPath = response.data;
+        }).then(function () {
+          _this2.show = false;
+          _this2.autenticatePost = true;
+        });
+      }
     }
-  }
+  } // computed: {
+  // 	autenticatePost(){
+  // 		return (this.imagePath || (this.post.content.lenght >0));
+  // 	}
+  // }
+
 });
 
 /***/ }),
@@ -65789,46 +65864,59 @@ var render = function() {
                 _vm._v("\n\t\t\t\t" + _vm._s(_vm.data.content) + "\n\t\t\t\t")
               ]),
               _vm._v(" "),
-              _vm.data.image
-                ? _c("b-card-img", {
-                    attrs: { src: _vm.data.image, alt: "Image" }
+              _c("p")
+            ]
+          ),
+          _vm._v(" "),
+          _vm.data.imagePath
+            ? _c(
+                "div",
+                {
+                  staticStyle: { "margin-bottom": "10px" },
+                  attrs: { src: _vm.data.imagePath, alt: "Image" }
+                },
+                [
+                  _c("b-img", {
+                    attrs: {
+                      src: _vm.imagePath,
+                      fluid: "",
+                      alt: "Responsive image"
+                    }
                   })
-                : _vm._e(),
-              _vm._v(" "),
-              _c("p"),
-              _vm._v(" "),
-              _vm._l(_vm.comments, function(comment, i) {
-                return _c(
-                  "ul",
-                  {
-                    key: i,
-                    staticClass: "list-unstyled",
-                    attrs: { "v-bind": _vm.comments }
-                  },
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm._l(_vm.comments, function(comment, i) {
+            return _c(
+              "ul",
+              {
+                key: i,
+                staticClass: "list-unstyled",
+                attrs: { "v-bind": _vm.comments }
+              },
+              [
+                _c(
+                  "b-list-group-item",
                   [
-                    _c(
-                      "b-list-group-item",
-                      [
-                        _c("comment", {
-                          attrs: {
-                            loggedUser: _vm.loggedUser,
-                            commentData: comment
-                          }
-                        })
-                      ],
-                      1
-                    )
+                    _c("comment", {
+                      attrs: {
+                        loggedUser: _vm.loggedUser,
+                        commentData: comment
+                      }
+                    })
                   ],
                   1
                 )
-              })
-            ],
-            2
-          ),
+              ],
+              1
+            )
+          }),
           _vm._v(" "),
           _c("coment-form", { attrs: { user: _vm.datos, postData: _vm.data } })
         ],
-        1
+        2
       ),
       _vm._v(" "),
       _c("div", { staticStyle: { "margin-top": "5px" } })
@@ -65892,7 +65980,7 @@ var render = function() {
                               placeholder: "Write something here...",
                               rows: "3",
                               "no-resize": "",
-                              required: ""
+                              state: _vm.autenticatePost
                             },
                             model: {
                               value: _vm.post.content,
@@ -65906,13 +65994,67 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      this.pfpPath
+                        ? _c(
+                            "div",
+                            [
+                              _c("b-img", {
+                                attrs: {
+                                  src: this.pfpPath,
+                                  fluid: "",
+                                  alt: "Responsive image"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "b-button",
+                        {
+                          staticStyle: {
+                            float: "right",
+                            "margin-top": "10px",
+                            "margin-left": "10px"
+                          },
+                          attrs: { type: "submit", variant: "outline-primary" }
+                        },
+                        [_vm._v("Post")]
+                      ),
+                      _vm._v(" "),
                       _c(
                         "b-button",
                         {
                           staticStyle: { float: "right", "margin-top": "10px" },
-                          attrs: { type: "submit", variant: "outline-primary" }
+                          attrs: { variant: "outline-primary" },
+                          on: { click: _vm.uploadPhoto }
                         },
-                        [_vm._v("Post")]
+                        [_vm._v("\r\n\t\t\t\t\t\tUpload image\r\n\t\t\t\t\t")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticStyle: { visibility: "hidden", height: "0px" }
+                        },
+                        [
+                          _c("b-form-file", {
+                            staticClass: "mt-3",
+                            attrs: { id: "fileUploadPOST", accept: "image/*" },
+                            on: { input: _vm.uploadimage },
+                            model: {
+                              value: _vm.pfpfile,
+                              callback: function($$v) {
+                                _vm.pfpfile = $$v
+                              },
+                              expression: "pfpfile"
+                            }
+                          })
+                        ],
+                        1
                       )
                     ],
                     1

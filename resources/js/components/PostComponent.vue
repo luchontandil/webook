@@ -25,13 +25,16 @@
 			 <div style="word-break: break-all;">
 				{{ data.content }}
 				</div>
-				<b-card-img
-					v-if="data.image"
-					:src="data.image"
-					alt="Image"
-				>
-				</b-card-img>
 		 </p>
+	</b-media>
+		 <div
+		 v-if="data.imagePath"
+		 :src="data.imagePath"
+		 alt="Image"
+		 style="margin-bottom:10px;"
+		 >
+			 <b-img :src="imagePath" fluid alt="Responsive image"></b-img>
+		 </div>
 		 <ul class="list-unstyled"
 		 	:v-bind="comments"
 			v-for="(comment,i) in comments"
@@ -42,7 +45,7 @@
 		 </b-list-group-item>
 	 	</ul>
 
-	</b-media>
+
 	<coment-form :user="datos" :postData="data" ></coment-form>
 	</b-card-body>
 
@@ -88,6 +91,9 @@
 			},
 			pfp(){
   			return this.data.onlyView!=1 ? '../'+this.data.user.pfp : '../../'+this.data.user.pfp;
+  		},
+			imagePath(){
+  			return this.data.onlyView!=1 ? '../'+this.data.imagePath : '../../'+this.data.imagePath;
   		},
 			timeAgo(){
 				var now = +new Date();

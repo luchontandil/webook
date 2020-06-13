@@ -33,8 +33,11 @@ Route::get('/getPosts/{username}', 'UserController@getPosts')->name('getPosts');
 
 Route::post('/deleteComment','UserController@deleteComment');
 Route::post('/deletePost','UserController@deletePost');
+
 Route::post('/updateBio','UserController@changeBio');
 Route::post('/updatePFP','UserController@changePFP');
+Route::post('/uploadImage','UserController@uploadImage');
+
 Route::post('/follow','UserController@follow');
 Route::post('/post','UserController@post');
 Route::post('/comment','UserController@comment');

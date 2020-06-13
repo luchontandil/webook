@@ -43,7 +43,8 @@ class UserController extends Controller
       $post = new Post([
         'content' => $request->content,
         'likedBy' => $request->likedBy,
-        'user_id' => User::find(Auth::user()->id)
+        'user_id' => User::find(Auth::user()->id),
+        'imagePath' => $request->imagePath,
       ]);
 
       $post->save();
@@ -115,6 +116,19 @@ class UserController extends Controller
 			$user->refresh();
 
 			return response()->json($user->pfp);
+    }
+    public function uploadImage(Request $request){
+      $imageName = rand().''.time().''.rand().'.'.$request->ext;
+      $request->photo->move(public_path('images/posts'), $imageName);
+
+      // $this->jpegImgCrop('../public/images/users/'.$imageName, $request->ext);
+
+      // $user = User::find($request->userid);
+      // $user->pfp = 'images/users/'.$imageName;
+      // $user->save();
+      // $user->refresh();
+
+      return response()->json('images/posts/'.$imageName);
     }
     public function jpegImgCrop($target_url,$image_type) {//support
       $image = imagecreatefromjpeg($target_url);
