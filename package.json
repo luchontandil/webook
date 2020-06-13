@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "bootstrap-vue": "^2.15.0",
+        "mongodb": "^3.5.9",
         "vue-router": "^3.3.2"
     }
 }
