@@ -132,7 +132,7 @@ class UserController extends Controller
       return response()->json('images/posts/'.$imageName);
     }
     public function jpegImgCrop($target_url,$image_type) {//support
-      $image = imagecreatefromjpeg($target_url);
+      $image = imagecreatefromfile($target_url);
       $filename = $target_url;
       $width = imagesx($image);
       $height = imagesy($image);
