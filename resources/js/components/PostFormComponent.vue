@@ -77,7 +77,7 @@ export default {
 	data() {
 		return {
 			post: {
-				content: null,
+				content: '',
 			  autor: this.user,
 				likedBy: []
 			},
